@@ -5,12 +5,12 @@ QSizeGrip{
 
 
 QToolTip{ 
-    background-color: #0b0b0c;	
+    background-color: #45C484;	
 	color: rgb(230, 230, 230);
 	padding-left: 5px;
 	padding-right: 5px;
 	border-radius: 12px;
-    border: 1px solid #2f3032;
+    border: 1px solid #bdff00;
     border-left: 3px solid #bdff00;
     font: 800 9pt "Segoe UI";
 }
@@ -126,14 +126,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
 QAbstractItemView {
     show-decoration-selected: none; 
-    border:2px solid rgb(47, 48, 50);
+    border:2px solid #41D58B;	
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
     color:white;
-    background-color:rgb(70, 68, 68);
-    background:rgb(70, 68, 68);
+    background-color:#E8E8E8;
+    background:#E8E8E8;
     outline: none;
     /* max-height:100px; */
 
@@ -233,7 +233,7 @@ QComboBox QAbstractItemView::item:selected  {
 
 .list-view {
     show-decoration-selected: none; 
-    background-color:  #181818;
+    background-color:  #E8E8E8;
     border-radius:10px;
     outline: none;
     font-size:20px;

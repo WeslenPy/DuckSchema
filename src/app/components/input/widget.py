@@ -179,7 +179,11 @@ class InputSearch(InputText,Icon):
         
         
     def addSearchAction(self):
-        return  self.addAction(self.search,QLineEdit.ActionPosition.TrailingPosition)
+        
+        search_action = self.search
+        # search_action.set
+        return  self.addAction(search_action,
+                               QLineEdit.ActionPosition.TrailingPosition)
         
     def enabledSearch(self):
         self.search_enable  = not self.search_enable
@@ -199,6 +203,8 @@ class InputSearch(InputText,Icon):
         self.search_action =self.addSearchAction()
         self.search_action.triggered.connect(self.enabledSearch)
         
+        
+         
         self.setAutoFillBackground(False)
         
         self.editingFinished.connect(self.addEntry)

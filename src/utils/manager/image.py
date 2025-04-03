@@ -11,7 +11,9 @@ class ImageManager(BasePath,Extensions):
     
     def get_ico(self,filename:str)->QtGui.QIcon:
         path= self.get_filename(filename,self.type_svg,self.svg_icon_path) 
-        return QtGui.QIcon(path.as_posix())
+        
+        pixmap = QtGui.QPixmap(path.as_posix()).scaled(24, 24) 
+        return QtGui.QIcon(pixmap)
                    
     def get_ico_by_png(self,filename:str)->QtGui.QIcon:
         path= self.get_filename(filename,self.type_png,self.png_icon_path) 

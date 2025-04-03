@@ -50,14 +50,15 @@
 
 .form-input{
   border:none;
-  margin-left: 5px;
-  border: 2px solid rgb(47, 48, 50);
+  border: 2px solid #59e29e;
   border-radius: 10px;
-  background-color: rgb(47, 48, 50);
-  color: rgb(255, 255, 255);
+  background-color: #FFFFFF;
+  color: #000;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 5px;
+  font-size:20px;
+  icon-size: 32px;
   padding-bottom: 5px;
   background-repeat: none;
   background-position: left center;
@@ -72,14 +73,14 @@
 
 
 .form-input:hover {
-	color: rgb(230, 230, 230);
-  border: 3px solid rgb(62, 63, 66);
+	color:  #000;
+  border: 2px solid  #1bbeff;
   }
 
 .form-input:focus {
-  color: rgb(230, 230, 230);
+  color: #000;
   border: 2px solid  #1bbeff;
-  background-color: rgb(43, 40, 40);
+  background-color: #FFFFFF;
 }
 
 
@@ -341,11 +342,11 @@
 }
 
 .btn-side:hover{
-  background-color:  #302f2f;
+  background-color:  #41D58B;
 }
 
 .btn-side:pressed{
-  background-color:  #494646;
+  background-color:  #1bbeff;
 }
 
 
@@ -361,12 +362,12 @@
 
 
 .tooltip {		
-	background-color: #0b0b0c;	
-	color: rgb(230, 230, 230);
+	background-color: #41D58B;	
+	color: white;
 	padding-left: 10px;
 	padding-right: 10px;
 	border-radius: 17px;
-  border: 1px solid #2f3032;
+  border: 1px solid #41D58B;
   border-left: 3px solid  rgba(26, 190, 255,1);
   font: 800 9pt "Roboto";
 }
@@ -433,6 +434,10 @@
   margin-bottom:10px;
 }
 
+
+.pt-5{
+  padding-top:50px;
+}
 
 .fs-robot{
   font-family: "Roboto";

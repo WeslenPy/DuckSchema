@@ -9,15 +9,16 @@ class ListView(QListView):
         
         super().__init__(parent=parent)
         
-        self.hide()
+        # self.hide()
         
         self.parentWindow:QMainWindow =parent
         
         self.relative:QWidget = relative
+        
 
         self.setProperty("class",["list-view"])
         # self.setMinimumHeight(36)
-        self.setMinimumWidth(self.relative)
+        self.setMinimumWidth(self.relative.width())
         # self.adjustSize()
 
         self.shadow = QGraphicsDropShadowEffect(self)

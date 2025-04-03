@@ -1,47 +1,48 @@
 from src.utils.manager.image import ImageManager
+from PyQt6.QtGui import QIcon
 
 class Icon(ImageManager):
     
     @property
-    def add_plus(cls):
+    def add_plus(cls)->QIcon:
         return cls.get_ico("add_plus")  
         
     @property
-    def bank(cls):
+    def bank(cls)->QIcon:
         return cls.get_ico("bank")  
         
     @property
-    def confirm(cls):
+    def confirm(cls)->QIcon:
         return cls.get_ico("confirm")  
     
     
     @property
-    def gallery(cls):
+    def gallery(cls)->QIcon:
         return cls.get_ico("gallery")  
     
         
     @property
-    def trash(cls):
+    def trash(cls)->QIcon:
         return cls.get_ico("trash")  
     
     @property
-    def cancel(cls):
+    def cancel(cls)->QIcon:
         return cls.get_ico("cancel")
             
     @property
-    def search(cls):
+    def search(cls)->QIcon:
         return cls.get_ico("search")
         
     @property
-    def edit(cls):
+    def edit(cls)->QIcon:
         return cls.get_ico("edit")
     
     @property
-    def arrow_down(cls):
+    def arrow_down(cls)->QIcon:
         
         return cls.get_ico("arrow_down")    
     
     @property
-    def arrow_up(cls):
+    def arrow_up(cls)->QIcon:
         
         return cls.get_ico("arrow_up")
