@@ -32,20 +32,14 @@ class InputText(QFrame):
         self.layout_h = QVBoxLayout()
         
         self.input_field = QLineEdit()
-        self.name_label = QLabel()
-        
-        self.name_label.setText(self.textPlaceHolder)
-        self.name_label.setProperty("class",["text-white","text-left-small","fs-1"])
         
         self.input_field.setPlaceholderText(self.textPlaceHolder)
         self.input_field.setProperty("class",["form-input"])
         
         
-        self.setMaximumHeight(65)
-        self.name_label.setMaximumHeight(20)
-        self.input_field.setMaximumHeight(40)
+        self.setMaximumHeight(70)
+        self.input_field.setMaximumHeight(70)
         
-        self.layout_h.addWidget(self.name_label)
         self.layout_h.addWidget(self.input_field)
         
         self.layout_h.setSpacing(0)

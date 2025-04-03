@@ -26,7 +26,7 @@ class Home(Window):
         # self.app = parent
         
         
-        self.setMinimumSize(1200,720)
+        self.setMinimumSize(720,720)
         self.point_step = QtCore.QPoint()
         self.point_step.setX(-100)
         self.point_step.setY(-10)
@@ -115,7 +115,8 @@ class Home(Window):
         #FRAME ABAIXO DO TITLE BAR
         self.box_frame = QFrame()
         self.box_frame.setProperty(
-            "class",["bg-primary","frame-radius"])        
+            "class",["bg-primary","frame-radius"])  
+        # self.box_frame.setMaximumWidth(200)      
         
         
         #FRAME ABAIXO DO TITLE BAR
@@ -140,7 +141,6 @@ class Home(Window):
         self.close_btn = QToolButton()
         self.min_btn = QToolButton()
         self.max_btn = QToolButton()
-        
         
         
         #FRAME DO TITLE BAR
@@ -292,6 +292,8 @@ class Home(Window):
         
         self.setFrameLess()
         self.setCentralWidget(self.main_frame)
+        
+        self.setProperty("class",["bg-primary"])
 
         
     def resizeEvent(self, event:QResizeEvent):

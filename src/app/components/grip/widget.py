@@ -18,6 +18,9 @@ class Grip(QWidget):
         grip_frame.setMaximumSize(QSize(10, 10))
         grip_frame.setCursor(QCursor(Qt.CursorShape.SizeBDiagCursor))
         
+        # grip_frame.setStyleSheet(u"background-color: transparent;")
+        
+        
         return grip_frame
     
     def addMinimun(self):
@@ -28,14 +31,17 @@ class Grip(QWidget):
     
     def addLeftGrip(self):
         self.grip_left = self.gripFrame()
-        self.grip_left.setStyleSheet(u"background-color: transparent;")
+        self.grip_left.setStyleSheet("background-color: rgba(250, 250, 250, 0.843);border-radius:5px;")
         
         
         self.grip_layout.addWidget(self.grip_left)
         
     def addRigthGrip(self):
         self.grip_right = self.gripFrame()
-        self.grip_right.setStyleSheet(u"background-color: transparent;")
+        self.grip_right.setStyleSheet("background-color: rgb(250, 250, 250);border-radius:5px;")
+        
+        
+        # self.grip_right.setStyleSheet(u"background-color: transparent;")
         
         
         self.grip_layout.addWidget(self.grip_right)
@@ -46,13 +52,17 @@ class Grip(QWidget):
         self.container_grip.setMinimumSize(QSize(0, 10))
         # self.container_grip.setMaximumSize(QSize(16777215, 10))
         
+        self.container_grip.setProperty("class",["bg-primary","br-5"])
+        
         self.grip_layout = QHBoxLayout(self.container_grip)
         self.grip_layout.setContentsMargins(0, 0, 0, 0)
         self.grip_layout.setSpacing(0)
         
         self.center_grip = QFrame()
         self.center_grip.setCursor(QCursor(Qt.CursorShape.SizeVerCursor))
-        self.center_grip.setProperty("class",["bg-primary"])
+        self.center_grip.setProperty("class",["bg-primary","br-5"])
+        
+        self.setProperty("class",["bg-primary","br-5"])
         
         
         
@@ -144,9 +154,9 @@ class GripTop(Grip):
         # self.top_left.setStyleSheet("background: transparent")
         # self.top_right.setStyleSheet("background: transparent")
         
-        self.center_grip.setProperty("class",["bg-primary"])
-        self.top_right.setProperty("class",["bg-primary"])
-        self.top_left.setProperty("class",["bg-primary"])
+        # self.center_grip.setProperty("class",["bg-primary"])
+        # self.top_right.setProperty("class",["bg-primary"])
+        # self.top_left.setProperty("class",["bg-primary"])
 
         
         layout.addWidget(self.container_grip)
@@ -157,7 +167,7 @@ class GripBottom(Grip):
         
         self.parentWindow = parent
         
-        self.setProperty("class",["bg-primary"])
+        # self.setProperty("class",["bg-primary"])
         
         
     def resizeWindow(self,event:QMouseEvent):
@@ -192,8 +202,8 @@ class GripBottom(Grip):
         
         self.center_grip.mouseMoveEvent = self.resizeWindow
         
-        self.top_left.setStyleSheet("background: transparent")
-        self.top_right.setStyleSheet("background: transparent")
+        # self.top_left.setStyleSheet("background: transparent")
+        # self.top_right.setStyleSheet("background: transparent")
         
         
         

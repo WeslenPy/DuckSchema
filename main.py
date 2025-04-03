@@ -28,7 +28,7 @@ if __name__ == "__main__":
     CssManager().load_all_css(app=app)
     
     window = Home()
-    window.showMaximized()
+    window.show()
     window.setFocus()
     Model.metadata.create_all(engine)
     

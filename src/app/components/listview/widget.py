@@ -17,9 +17,6 @@ class ListView(QListView):
         
 
         self.setProperty("class",["list-view"])
-        # self.setMinimumHeight(36)
-        self.setMinimumWidth(self.relative.width())
-        # self.adjustSize()
 
         self.shadow = QGraphicsDropShadowEffect(self)
         self.shadow.setBlurRadius(15)

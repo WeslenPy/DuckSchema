@@ -1,17 +1,17 @@
 
 .bg-primary{
-    background-color: #FAFAFA;
-    background: #FAFAFA;
+    background-color: rgb(250, 250, 250);
+    background:  rgb(250, 250, 250);
     color:#FAFAFA;
   }
   
 .bg-secondary{
     color:#FAFAFA;
-    background-color:  #45C484;
+    background-color:  #13814a;
   }
   
 
 
 .main-frame{
-    background-color: #45C484;
+    background-color: #159957;
   }

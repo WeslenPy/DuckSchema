@@ -235,6 +235,8 @@ QComboBox QAbstractItemView::item:selected  {
     show-decoration-selected: none; 
     background-color:  #E8E8E8;
     border-radius:10px;
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
     outline: none;
     font-size:20px;
     padding: 10px;
