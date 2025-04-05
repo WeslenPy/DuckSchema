@@ -1,18 +1,39 @@
-[tool.poetry]
+[project]
 name = "diskrecuperar"
 version = "0.1.0"
 description = "Diskrecuperar"
-authors = ["weslenpy <weslenjhony@gmail.com>"]
-license = "MIT"
+authors = [
+ {name = "weslenpy", email = "weslenjhony@gmail.com"}
+]
+license = { file="LICENSE" }
 readme = "README.md"
+requires-python = ">=3.9, <=3.11"
+
+dependencies = [
+    "pyqt6 (>=6.8.1)",
+    "bcrypt (>=4.3.0)",
+    "sqlalchemy (>=2.0.40)",
+    "httpx (>=0.28.1)",
+    "marshmallow-sqlalchemy (>=1.4.1)",
+    "briefcase (>=0.3.22)",
+
+]
+
 
 [tool.poetry.dependencies]
-python = "^3.9"
-pyqt6 = "^6.8.1"
-bcrypt = "^4.3.0"
-sqlalchemy = "^2.0.40"
-httpx = "^0.28.1"
-marshmallow-sqlalchemy = "^1.4.1"
+python3 = ">=3.9,<4.0"
+
+
+[tool.briefcase]
+project_name="Banco de Arquivos"
+bundle = "com.bancodearquivos"
+
+
+[tool.briefcase.app.src]
+description="Banco de arquivos"
+long_description = "Sistema de arquivos, para download"
+sources =["src"]
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"

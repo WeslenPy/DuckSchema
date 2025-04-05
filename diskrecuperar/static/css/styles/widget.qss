@@ -1,0 +1,301 @@
+QSizeGrip{
+    background-color:#1F1F1F;
+}
+
+
+
+QToolTip{ 
+    background-color: #45C484;	
+	color: rgb(230, 230, 230);
+	padding-left: 5px;
+	padding-right: 5px;
+	border-radius: 12px;
+    border: 1px solid #bdff00;
+    border-left: 3px solid #bdff00;
+    font: 800 9pt "Segoe UI";
+}
+
+
+
+QScrollBar:horizontal {
+    background:#d9d9d9;
+    background-color:#d9d9d9;
+    margin: 20px 20px 20px 20px;
+
+
+}
+
+QScrollBar::handle:horizontal {
+    background:  #1F1F1F;
+    background-color: #1F1F1F;
+}
+
+QScrollBar::add-line:horizontal {
+    background: none;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+    
+}
+
+QScrollBar::sub-line:horizontal {
+    background: none;
+    subcontrol-position: top left;
+    subcontrol-origin: margin;
+    position: absolute;
+}
+
+QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    width: 26px;
+    height: 26px;
+    background: none;
+    image: url('./glass.png');
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background:#d9d9d9;
+    background-color:#d9d9d9;
+    border:1px solid #d9d9d9;
+    width: 14px;
+    margin: 15px 0 15px 0;
+    border-radius:0px;
+   
+
+}
+
+QScrollBar::handle:vertical {
+    background:  #159957;
+    background-color: #159957;
+    min-height: 30px;
+    border-radius:4px;
+    border: none;
+
+
+}
+
+QScrollBar::handle:vertical:hover {	
+    background-color: #37bb92;
+}
+
+
+QScrollBar::add-line:vertical {
+    border: none;
+    background-color:  #159957;
+    height: 15px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+
+}
+
+QScrollBar::sub-line:vertical {
+    border: none;
+    background-color: #159957;
+    height: 15px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+
+QScrollBar::add-line:vertical:hover {	
+    background-color: #37bb92;
+}
+
+
+QScrollBar::add-line:vertical:pressed {	
+    background-color: #37bb92;
+}
+
+QScrollBar::sub-line:vertical:hover {	
+    background-color: #37bb92;
+}
+QScrollBar::sub-line:vertical:pressed {	
+    background-color:  #37bb92;
+}
+
+
+QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QAbstractItemView {
+    show-decoration-selected: none; 
+    border:none;	
+    color:white;
+    background-color:#45c484;
+    background:#45c484;
+    outline: none;
+
+}
+
+
+QAbstractItemView::item:hover  {
+    selection-background-color: none;
+    background-color:#1bbeff;
+    background:#1bbeff;
+    border:none;
+    outline: none;
+}
+
+
+
+QAbstractItemView::item {
+    selection-background-color: none;
+    background-color:#45c484;
+    background:#45c484;
+    outline: none;
+    border:none;
+
+}
+
+
+QAbstractItemView::item:selected:active  {
+    background-color:#1bbeff;
+    background:#1bbeff;
+    outline: none;
+}
+
+QAbstractItemView::item:selected  {
+    border:none;
+    outline: none;
+}
+
+
+
+
+QComboBox QAbstractItemView {
+    show-decoration-selected: none; 
+    border:none;
+    border-radius: 0;
+    color:white;
+    background-color:rgb(70, 68, 68);
+    background:rgb(70, 68, 68);
+    outline: none;
+
+    
+
+}
+
+
+
+QComboBox QAbstractItemView::item:hover  {
+    selection-background-color: none;
+    background-color:#1bbeff;
+    background:#1bbeff;
+    border:none;
+    outline: none;
+}
+
+
+
+QComboBox QAbstractItemView::item {
+    selection-background-color: none;
+    padding:5px;
+    background-color:rgb(70, 68, 68);
+    background:rgb(70, 68, 68);
+    border-radius:10px;
+    /* margin-right:10px; */
+
+    outline: none;
+    border:none;
+
+}
+
+
+QComboBox QAbstractItemView::item:selected:active  {
+    background-color:#1bbeff;
+    background:#1bbeff;
+    outline: none;
+}
+
+QComboBox QAbstractItemView::item:selected  {
+    border:none;
+    outline: none;
+}
+
+
+
+
+.list-view {
+    show-decoration-selected: none; 
+    background-color: #e8e8e8;
+    border-radius:10px;
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+    outline: none;
+    font-size:20px;
+    border:2px solid #45b490; 
+    padding:5px;
+    /* padding: 10px; */
+
+}
+  
+
+.list-view::item {
+
+    padding:0px;
+    min-height:50px;
+    /* padding-top:5px;
+    padding-bottom:10px; */
+    margin-top:5px;
+    border:2px solid #45b490;
+    border-radius:10px;
+    margin-right:5px;
+    margin-left:5px;
+
+}
+
+.list-view::item:alternate {
+    background-color:#45c484;
+    background:#45c484;
+    show-decoration-selected: none; 
+    outline: none;
+    /* margin-right: 5px; */
+
+}
+
+.list-view::item:selected {
+    background: #45c484;
+    background-color: #45c484;
+    show-decoration-selected: none; 
+    outline: none;
+    /* margin-right: 5px; */
+
+}
+
+.list-view::item:selected:!active {
+    show-decoration-selected: none; 
+    background:#45c484;
+    background-color:#45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+.list-view::item:selected:active {
+    show-decoration-selected: none; 
+    background: #45c484;
+    background-color: #45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+.list-view::item:hover {
+    show-decoration-selected: none; 
+    background-color:#45c484;
+    background: #45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+
