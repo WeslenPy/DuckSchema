@@ -1,7 +1,7 @@
 from diskrecuperar.utils.manager.path import BasePath
 from diskrecuperar.utils.manager.extensions import Extensions
 from pathlib import Path
-from PyQt6 import QtGui
+from PySide6 import QtGui
 
 class ImageManager(BasePath,Extensions):
     

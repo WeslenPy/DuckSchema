@@ -1,4 +1,4 @@
-from PyQt6.QtCore import *
+from PySide6.QtCore import *
 import requests
 from pathlib import Path
 import tempfile,shutil
@@ -10,13 +10,13 @@ MAX_CONCURRENT_DOWNLOADS = 3
 semaphore = QSemaphore(MAX_CONCURRENT_DOWNLOADS)
 
 class DownloadSignals(QObject):
-    progress = pyqtSignal(int)
-    finished = pyqtSignal(bool)
-    cancel = pyqtSignal(bool)
-    velocity = pyqtSignal(float)
-    status = pyqtSignal(bool)
-    file = pyqtSignal(str)
-    error = pyqtSignal(bool)
+    progress = Signal(int)
+    finished = Signal(bool)
+    cancel = Signal(bool)
+    velocity = Signal(float)
+    status = Signal(bool)
+    file = Signal(str)
+    error = Signal(bool)
 
 
 class DownloadTask(QRunnable):

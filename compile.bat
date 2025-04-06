@@ -1,0 +1,1 @@
+python -m nuitka --onefile --onefile-windows-splash-screen-image="./diskrecuperar/static/img/png/logo/logo.png" --product-name="BancoDeArquivos" --windows-uac-admin --product-version="1.0.0" --file-version="1.0.0" --file-description="Sistema de download de arquivos para tecnicos" --enable-plugin=pyside6 --windows-icon-from-ico=icon.ico --windows-console-mode=disable main.py"

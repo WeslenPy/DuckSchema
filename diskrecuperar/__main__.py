@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
-from PyQt6 import QtWidgets,QtCore,QtGui
+from PySide6 import QtWidgets,QtCore,QtGui
 from diskrecuperar.app.window.layout.home.window import Home
 from diskrecuperar.database.config.base import Model
 from diskrecuperar.database.config.conn import engine

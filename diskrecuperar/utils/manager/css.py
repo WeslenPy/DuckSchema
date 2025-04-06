@@ -1,8 +1,8 @@
 from diskrecuperar.utils.manager.path import BasePath
 from diskrecuperar.utils.manager.extensions import Extensions
 from pathlib import Path
-from PyQt6.QtGui import *
-from PyQt6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
 
 
 class CssManager(BasePath,Extensions):

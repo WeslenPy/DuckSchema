@@ -1,10 +1,10 @@
 
-from PyQt6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow
 from diskrecuperar.utils.manager.image import ImageManager
 
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PySide6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
 from diskrecuperar.app.components.tooltip.widget import ToolTip
 from diskrecuperar.app.components.icon.widget import Icon
 

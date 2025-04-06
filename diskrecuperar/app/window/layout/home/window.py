@@ -1,12 +1,12 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PySide6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
 
 from diskrecuperar.app.components.grip.widget import GripTop,GripBottom,GripRight,GripLeft
 from diskrecuperar.app.components.button.page import ButtonPage
 from diskrecuperar.app.window.stack.manager import PageManager
 from diskrecuperar.app.components.window.widget import Window
-from PyQt6 import QtCore,QtWidgets,QtGui
+from PySide6 import QtCore,QtWidgets,QtGui
 from diskrecuperar.utils.manager.css import CssManager
 
 from diskrecuperar.app.components.message.widget import MessageBox
@@ -17,8 +17,8 @@ class Home(Window):
     WIDTH =80
     HEIGHT = 40
     
-    activeSignal = pyqtSignal(str)
-    enabledSignal = pyqtSignal(bool)
+    activeSignal = Signal(str)
+    enabledSignal = Signal(bool)
     
     def __init__(self) -> None:
         super().__init__()

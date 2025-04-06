@@ -1,7 +1,7 @@
 from diskrecuperar.app.window.pages.home.widget import HomePage
 from diskrecuperar.app.window.pages.search.widget import SearchPage
 from diskrecuperar.app.window.pages.history.widget import HistoryPage
-from PyQt6.QtWidgets import QStackedWidget
+from PySide6.QtWidgets import QStackedWidget
 
 
 class PageManager:

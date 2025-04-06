@@ -1,7 +1,7 @@
 from diskrecuperar.app.components.window.widget import Window
 from diskrecuperar.utils.manager.image import ImageManager
 from diskrecuperar.database.model.admin.user import User
-from PyQt6 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets, QtCore, QtGui
 from diskrecuperar.database.config.conn import Session
 
 import bcrypt

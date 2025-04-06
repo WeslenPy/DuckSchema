@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PySide6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
 
 from diskrecuperar.app.components.button.widget import PushButton
 
@@ -10,8 +10,8 @@ class ButtonPage(PushButton):
     EXCLUDE = ["menu"]
     
     def __init__(self,parent:QMainWindow,name:str,title:str,
-                 signal:pyqtSignal,
-                 enabled:pyqtSignal,
+                 signal:Signal,
+                 enabled:Signal,
                  layout:QBoxLayout,) -> None:
         
         super().__init__(parent=parent,name=name,title=title)
@@ -21,8 +21,8 @@ class ButtonPage(PushButton):
         
         self.parentWindow = parent
         
-        self.signal:pyqtBoundSignal = signal
-        self.enabled:pyqtBoundSignal = enabled
+        self.signal:SignalInstance = signal
+        self.enabled:SignalInstance = enabled
         self.layoutBox =layout
         
         self.setProperty("class",["btn-side","text-white"])
@@ -55,12 +55,12 @@ class ButtonPage(PushButton):
         self.addSignal()
         
         
-    @pyqtSlot()
+    @Slot()
     def enableText(self,mode:bool):
         self.setText("")
         if mode:  self.setText(self.title)
             
-    @pyqtSlot()
+    @Slot()
     def signalDeactivate(self,name:str):
         
         if name==self.name:

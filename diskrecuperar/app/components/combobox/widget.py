@@ -1,9 +1,9 @@
 from diskrecuperar.app.components.listview.widget import ListView
 
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtGui import QCloseEvent, QDropEvent, QFocusEvent, QPaintEvent, QShowEvent
-from PyQt6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtGui import QCloseEvent, QDropEvent, QFocusEvent, QPaintEvent, QShowEvent
+from PySide6.QtWidgets import *
 
 class ComboBox(QFrame):
 

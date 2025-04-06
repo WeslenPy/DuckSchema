@@ -1,5 +1,5 @@
 
-from PyQt6 import QtWidgets,QtCore
+from PySide6 import QtWidgets,QtCore
 from diskrecuperar.utils.manager.image import ImageManager
 
 

@@ -1,15 +1,15 @@
 
-from PyQt6.QtCore import *
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtWidgets import QWidget
+from PySide6.QtCore import *
+from PySide6.QtCore import Qt
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+from PySide6.QtWidgets import QWidget
 from diskrecuperar.app.components.button.widget import PushAction
 
 from diskrecuperar.utils.manager.path import BasePath
 from diskrecuperar.utils.manager.download import DownloadTask
 
-from PyQt6.QtCore import QThreadPool
+from PySide6.QtCore import QThreadPool
 class ListWidget(QListWidget):
     
     def __init__(self, parent=None,relative:QWidget=None):
@@ -195,6 +195,8 @@ class ItemView(QWidget):
             
             task = DownloadTask(self.url,self.directory)
             
+            self.progress_bar_download.setValue(0)
+            
             task.signals.progress.connect(self.progress_bar_download.setValue)
             task.signals.finished.connect(self.progressFinish)
             task.signals.velocity.connect(lambda msg: print(msg))
@@ -230,12 +232,10 @@ class ItemView(QWidget):
 
         
             
-    def closeEvent(self, event: QCloseEvent):
+    def stopTasks(self):
         print("🛑 Cancelando todas as tarefas...")
         for task in self.tasks:
             task.setCancel()
-            
 
         self.pool.waitForDone(3000)  
         
-        return super().closeEvent(event)

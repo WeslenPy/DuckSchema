@@ -1,16 +1,16 @@
-from PyQt6.QtGui import QCloseEvent, QShowEvent
+from PySide6.QtGui import QCloseEvent, QShowEvent
 from diskrecuperar.app.components.window.widget import Window
 from diskrecuperar.app.components.button.widget import PushButton
 
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
 from diskrecuperar.utils.manager.image import ImageManager
 
 
 class MessageBox(Window):
-    close_box = pyqtSignal(bool)
-    accept_box = pyqtSignal(bool)
+    close_box = Signal(bool)
+    accept_box = Signal(bool)
     
     
     @property

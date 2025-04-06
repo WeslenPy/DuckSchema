@@ -1,8 +1,8 @@
 
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtGui import QEnterEvent, QFocusEvent, QKeyEvent, QWheelEvent
-from PyQt6.QtWidgets import *
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtGui import QEnterEvent, QFocusEvent, QKeyEvent, QWheelEvent
+from PySide6.QtWidgets import *
 from diskrecuperar.utils.manager.money import MoneyManager
 from diskrecuperar.app.components.icon.widget import Icon
 from diskrecuperar.app.components.button.widget import PushButton

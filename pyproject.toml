@@ -10,12 +10,12 @@ readme = "README.md"
 requires-python = ">=3.9, <=3.11"
 
 dependencies = [
-    "pyqt6 (>=6.8.1)",
     "bcrypt (>=4.3.0)",
     "sqlalchemy (>=2.0.40)",
     "httpx (>=0.28.1)",
     "marshmallow-sqlalchemy (>=1.4.1)",
     "briefcase (>=0.3.22)",
+    "pyside6 (>=6.9.0,<7.0.0)",
 
 ]
 
@@ -40,6 +40,7 @@ pytest = "^8.3.5"
 pytest-cov = "^6.0.0"
 taskipy = "^1.14.1"
 ruff = "^0.11.2"
+nuitka = "^2.6.9"
 
 [tool.ruff]
 line-length = 79
@@ -72,6 +73,7 @@ run = 'python main.py'
 pre_test = 'task lint'
 test = 'pytest -s -x --cov=app -vv'
 post_test = 'coverage html'
+compile = "compile.bat"
 
 
 [build-system]

@@ -1,5 +1,5 @@
 from diskrecuperar.utils.manager.image import ImageManager
-from PyQt6.QtGui import QIcon
+from PySide6.QtGui import QIcon
 
 class Icon(ImageManager):
     
