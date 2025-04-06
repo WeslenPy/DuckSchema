@@ -1,4 +1,6 @@
 from pathlib import Path,PurePath
+import sys,os
+
 
 class BasePath:
     
@@ -74,4 +76,13 @@ class BasePath:
     
     def joinpath(self,joined:str,root_path:Path):
         return Path.joinpath(root_path,joined)
-  
+    
+    @classmethod
+    def get_download_dir(cls):
+        if sys.platform.startswith("win"):
+            return Path(os.path.join(os.environ["USERPROFILE"],
+                                     "Downloads")).as_posix()
+        elif sys.platform.startswith("darwin"):
+            return Path.home() / "Downloads"
+        else:  
+            return Path.home() / "Downloads"

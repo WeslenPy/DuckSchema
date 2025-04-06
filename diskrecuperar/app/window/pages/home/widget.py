@@ -87,7 +87,7 @@ class HomePage(QWidget):
         self.file_path= self.manager.get_svg_logo("logo")
         self.logo_size = QSvgRenderer(self.file_path)
         self.logo_svg = QSvgWidget(self.file_path)
-        self.logo_svg.setFixedSize(420,150)
+        self.logo_svg.setFixedSize(450,120)
         
         
         self.logo_svg.leaveEvent = self.animatedOnLeave

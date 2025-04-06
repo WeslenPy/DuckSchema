@@ -6,8 +6,10 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtWidgets import QWidget
 from diskrecuperar.app.components.button.widget import PushAction
 
+from diskrecuperar.utils.manager.path import BasePath
+from diskrecuperar.utils.manager.download import DownloadTask
 
-
+from PyQt6.QtCore import QThreadPool
 class ListWidget(QListWidget):
     
     def __init__(self, parent=None,relative:QWidget=None):
@@ -83,19 +85,46 @@ class ListWidget(QListWidget):
         
         
 class ItemView(QWidget):
-    def __init__(self, parent=None,**kwargs):
+    
+    
+    
+    def __init__(self, parent=None,url:str=None,
+                 _id:int=None,directory:str=None,**kwargs):
+        
+        
         super().__init__(parent=parent,**kwargs)
         
-        self.url = None
+        self.url = url or  "https://nbg1-speed.hetzner.com/100MB.bin"
+        self.directory =directory
         
+        self.id = _id
+        self.pool = QThreadPool()
+        
+        self.tasks:list[DownloadTask] = []
         self._setup()
+        
+    def resetLayout(self,layout:QLayout):
+        
+        layout.setContentsMargins(5,5,5,5)
+        layout.setSpacing(0)
         
     def _setup(self):
         
         container_frame = QFrame()
-        # container_frame.setMinimumHeight(100)
+        actions_frame = QFrame()
         
-        container_layout = QHBoxLayout(container_frame)
+        
+        container_layout = QVBoxLayout(container_frame)
+        actions_layout = QHBoxLayout(actions_frame)
+        
+        self.resetLayout(container_layout)
+        self.resetLayout(actions_layout)
+        
+        
+        self.progress_bar_download = QProgressBar()
+        self.progress_bar_download.setMaximumHeight(10)
+        self.progress_bar_download.setRange(0, 100)
+        self.progress_bar_download.hide()
         
         label_title = QLabel()
         
@@ -103,18 +132,37 @@ class ItemView(QWidget):
         label_title.setProperty("class",["text-white","fs-2","fs-w-400"])
         
         self.button_download = PushAction(icon="download")
+        self.button_download.clicked.connect(self.onclickDownload)         
+        
+        self.button_cancel = PushAction(icon="cancel")
+        # self.button_cancel.clicked.connect(self.onclickCancel) 
+        self.button_cancel.setProperty("class",["btn-cancel"])
+        self.button_cancel.hide()
         
         self.button_like = PushAction(icon="like")
-        self.button_like.clicked.connect(self.onclick_like)
+        self.button_like.clicked.connect(self.onclickLike)
         
         self.button_star = PushAction(icon="star")
-        self.button_star.clicked.connect(self.onclick_star)
+        self.button_star.clicked.connect(self.onclickStar)        
+        
+        self.button_open_folder = PushAction(icon="folder_open")
+        self.button_open_folder.clicked.connect(self.onclickOpenFolder)
+        self.button_open_folder.hide()
         
         
-        container_layout.addWidget(label_title)
-        container_layout.addWidget(self.button_star)
-        container_layout.addWidget(self.button_like)
-        container_layout.addWidget(self.button_download)
+        actions_layout.addWidget(label_title)
+        actions_layout.addWidget(self.button_star)
+        actions_layout.addWidget(self.button_like)
+        actions_layout.addWidget(self.button_download)
+        actions_layout.addWidget(self.button_cancel)
+        actions_layout.addWidget(self.button_open_folder)
+        
+        
+        
+        container_layout.addWidget(actions_frame)
+        container_layout.addWidget(self.progress_bar_download)
+        
+        
         
         self.setLayout(container_layout)
         
@@ -122,12 +170,72 @@ class ItemView(QWidget):
     def setURLDownload(self,url:str):
         self.url = url
         
-    def onclick_like(self):
+    def onclickOpenFolder(self):
+        if self.directory:
+            QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.directory)))
+        
+    def onclickCancel(self,task:DownloadTask):
+        task.setCancel()
+        
+        self.button_cancel.hide()
+        self.button_download.show()
+        self.progress_bar_download.hide()
+        
+    def onclickDownload(self):
+        
+        self.directory = str(QFileDialog.getExistingDirectory(self,
+                                                    "Selecione o diretorio.",
+                                                    BasePath.get_download_dir()
+                                                    ))
+        
+        if self.directory:
+            self.progress_bar_download.show()
+            self.button_download.hide()
+            self.button_cancel.show()
+            
+            task = DownloadTask(self.url,self.directory)
+            
+            task.signals.progress.connect(self.progress_bar_download.setValue)
+            task.signals.finished.connect(self.progressFinish)
+            task.signals.velocity.connect(lambda msg: print(msg))
+            task.signals.error.connect(lambda msg: print(msg))
+            
+            # task.signals.cancel.connect()
+            self.button_cancel.clicked.connect(
+                lambda:self.onclickCancel(task))
+
+
+            self.tasks.append(task)
+            self.pool.start(task)
+        
+    
+    def onclickLike(self):
         self.button_like._setIconItem("like_fill")    
         
         
-    def onclick_star(self):
+    def onclickStar(self):
         self.button_star._setIconItem("star_fill")
         
         
         
+    def progressFinish(self):
+
+
+        self.progress_bar_download.hide()
+        
+        self.button_download.show()
+        self.button_open_folder.show()
+        self.button_cancel.hide()
+
+
+        
+            
+    def closeEvent(self, event: QCloseEvent):
+        print("🛑 Cancelando todas as tarefas...")
+        for task in self.tasks:
+            task.setCancel()
+            
+
+        self.pool.waitForDone(3000)  
+        
+        return super().closeEvent(event)

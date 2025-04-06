@@ -1,34 +1,103 @@
+from PyQt6.QtCore import *
+import requests
+from pathlib import Path
+import tempfile,shutil
+
+import time
+from collections import deque
+
+MAX_CONCURRENT_DOWNLOADS = 3
+semaphore = QSemaphore(MAX_CONCURRENT_DOWNLOADS)
+
+class DownloadSignals(QObject):
+    progress = pyqtSignal(int)
+    finished = pyqtSignal(bool)
+    cancel = pyqtSignal(bool)
+    velocity = pyqtSignal(float)
+    status = pyqtSignal(bool)
+    file = pyqtSignal(str)
+    error = pyqtSignal(bool)
 
 
+class DownloadTask(QRunnable):
+    def __init__(self, url,folder:str):
+        super().__init__()
+        
+        self.url:str = url
+        self.folder:str = folder
+        self.signals = DownloadSignals()
+        
+        self.cancelled = False
+        
+    def setCancel(self):
+        self.cancelled = True
 
-class DownloadThread(QThread):
-    download_proess_signal = pyqtSignal(int)                        #Create signal
- 
-    def __init__(self, url, filesize, fileobj, buffer):
-        super(DownloadThread, self).__init__()
-        self.url = url
-        self.filesize = filesize
-        self.fileobj = fileobj
-        self.buffer = buffer
- 
- 
     def run(self):
+        
+        if self.cancelled:
+            return
+        
+        self.signals.status.emit(False)
+        semaphore.acquire()  # Aguarda se limite for atingido
+        
+        if self.cancelled:
+            semaphore.release()
+            return
+        
+        
         try:
-            rsp = requests.get(self.url, stream=True)                #Streaming download mode
-            offset = 0
-            for chunk in rsp.iter_content(chunk_size=self.buffer):
-                if not chunk: break
-                self.fileobj.seek(offset)                            #Setting Pointer Position
-                self.fileobj.write(chunk)                            #write file
-                offset = offset + len(chunk)
-                proess = offset / int(self.filesize) * 100
-                self.download_proess_signal.emit(int(proess))        #Sending signal
+            filename = self.url.split("/")[-1]
+            filepath = Path(self.folder).joinpath(filename).as_posix()
+            temp_dir = Path(tempfile.mkdtemp())
+            temp_path= Path(temp_dir).joinpath(filename).as_posix()
+            
+            self.signals.file.emit(filepath)
+        
+            with requests.get(self.url, stream=True, timeout=60) as r:
+                r.raise_for_status()
+                total = int(r.headers.get('content-length', 0))
+                downloaded = 0
+
+                self.signals.status.emit(True)
                 
-                
-            self.fileobj.close()    #Close file
-            self.exit(0)            #Close thread
- 
- 
+                speed_window = deque(maxlen=5)  # Últimos 5 segundos
+                time_window = deque(maxlen=5)
+                last_time = time.time()
+
+                with  open(temp_path, "wb") as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if self.cancelled:
+                            self.signals.cancel.emit(True)
+                            break
+                        if chunk:
+                            now = time.time()
+                            elapsed = now - last_time
+                            last_time = now
+                            
+                            f.write(chunk)
+                            downloaded += len(chunk)
+                            percent = int((downloaded / total) * 100)
+                            self.signals.progress.emit(percent)
+
+                            if elapsed > 0:
+                                speed_window.append(len(chunk))
+                                time_window.append(elapsed)
+
+                                total_speed = sum(speed_window) / sum(time_window)  # bytes/sec
+                                speed_mbps = total_speed / (1024 * 1024)
+
+                                self.signals.velocity.emit(float(f"{speed_mbps:.2f}"))
+                                
+
+            if not self.cancelled:
+                shutil.move(str(temp_path), filepath)
+                self.signals.finished.emit(True)
+            
+        except RuntimeError:
+            pass
+            
         except Exception as e:
-            print(e)
- 
+            self.signals.error.emit(True)
+            
+        finally:
+            semaphore.release()  # Libera uma vaga no pool

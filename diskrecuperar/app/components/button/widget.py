@@ -97,6 +97,6 @@ class PushAction(PushButton):
     def setup(self):
         
         self.setMinimumHeight(30)
-        self.setMaximumWidth(35)
+        self.setMaximumWidth(40)
         self._setIconItem(self.icon_find)
         self.setProperty("class",["btn-view"])

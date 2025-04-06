@@ -247,6 +247,20 @@
 
 }
 
+.btn-cancel{
+  border:none;
+  border-radius: 10px;
+  margin-left: 5px;
+  background-color:  #c94f2b;
+  background:   #c94f2b;
+  color: white;
+
+  padding:10px;
+}
+
+
+
+
 .btn-search{
   border:none;
   border-radius: 10px;
@@ -263,11 +277,31 @@
   color:#000;
 }
 
+.btn-cancel:hover{
+  background-color:  rgb(175, 46, 7);
+  background:   rgb(175, 46, 7);
+  color:#000;
+}
+
+
+.btn-view:disabled{
+  background-color: rgba(47, 48, 50,1);
+  background: rgba(47, 48, 50,1);
+  
+}
+
+.btn-view:hover + .btn-view:disabled{
+  background-color: rgba(47, 48, 50,1);
+  background: rgba(47, 48, 50,1);
+  
+}
+
 .btn-view:hover{
   background-color:  #37ec92;
   background: #37ec92;
   color:#000;
 }
+
 
 .btn:disabled{
   background-color: rgba(47, 48, 50,150);

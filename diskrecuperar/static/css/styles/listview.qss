@@ -1,0 +1,74 @@
+
+
+.list-view {
+    show-decoration-selected: none; 
+    background-color: #e8e8e8;
+    border-radius:10px;
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+    outline: none;
+    font-size:20px;
+    border:2px solid #45b490; 
+    padding:5px;
+    /* padding: 10px; */
+
+}
+  
+
+.list-view::item {
+
+    padding:0px;
+    min-height:70px;
+    /* padding-top:5px;
+    padding-bottom:10px; */
+    margin-top:5px;
+    border:2px solid #45b490;
+    border-radius:10px;
+    margin-right:5px;
+    margin-left:5px;
+
+}
+
+.list-view::item:alternate {
+    background-color:#45c484;
+    background:#45c484;
+    show-decoration-selected: none; 
+    outline: none;
+    /* margin-right: 5px; */
+
+}
+
+.list-view::item:selected {
+    background: #45c484;
+    background-color: #45c484;
+    show-decoration-selected: none; 
+    outline: none;
+    /* margin-right: 5px; */
+
+}
+
+.list-view::item:selected:!active {
+    show-decoration-selected: none; 
+    background:#45c484;
+    background-color:#45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+.list-view::item:selected:active {
+    show-decoration-selected: none; 
+    background: #45c484;
+    background-color: #45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+.list-view::item:hover {
+    show-decoration-selected: none; 
+    background-color:#45c484;
+    background: #45c484;
+    outline: none;
+    /* margin-right: 5px; */
+}
+
+
