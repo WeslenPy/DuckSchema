@@ -6,7 +6,7 @@ import tempfile,shutil
 import time
 from collections import deque
 
-MAX_CONCURRENT_DOWNLOADS = 3
+MAX_CONCURRENT_DOWNLOADS = 1
 semaphore = QSemaphore(MAX_CONCURRENT_DOWNLOADS)
 
 class DownloadSignals(QObject):

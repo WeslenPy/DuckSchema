@@ -2,12 +2,19 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 
-from diskrecuperar.app.components.grip.widget import GripTop,GripBottom,GripRight,GripLeft
-from diskrecuperar.app.components.button.page import ButtonPage
+from diskrecuperar.app.components.grip.widget import (GripTop,
+                                                      GripBottom,
+                                                      GripRight,
+                                                      GripLeft)
+
+
+
+from diskrecuperar.app.components.button.page import ButtonPage,ButtonWindow
 from diskrecuperar.app.window.stack.manager import PageManager
 from diskrecuperar.app.components.window.widget import Window
 from PySide6 import QtCore,QtWidgets,QtGui
 from diskrecuperar.utils.manager.css import CssManager
+from diskrecuperar.utils.manager.image import ImageManager
 
 from diskrecuperar.app.components.message.widget import MessageBox
 
@@ -32,6 +39,7 @@ class Home(Window):
         self.point_step.setY(-10)
         
         self.css_manager = CssManager()
+        self.img_manager = ImageManager()
         
         self.setup()
         
@@ -138,9 +146,8 @@ class Home(Window):
         self.main_layout = QHBoxLayout(self.box_frame)
         self.removeSpacing(layout=self.main_layout)  
         
-        self.close_btn = QToolButton()
-        self.min_btn = QToolButton()
-        self.max_btn = QToolButton()
+        
+        self.btn_window = ButtonWindow()
         
         
         #FRAME DO TITLE BAR
@@ -156,28 +163,20 @@ class Home(Window):
         self.tool_layout = QHBoxLayout(self.title_frame)
         self.removeSpacing(self.tool_layout)
         
-        
-        
         self.spacer = QSpacerItem(20,20,
                                   QSizePolicy.Policy.Expanding,
                                   QSizePolicy.Policy.Minimum)
 
         # CUSTOM BUTTONS DO TITLE BAR
         
-        self.close_btn.setProperty("class",["btn-radius","bg-red"])
-        self.min_btn.setProperty("class",["btn-radius","bg-green"])
-        self.max_btn.setProperty("class",["btn-radius","bg-orange"])
-        
-        self.close_btn.clicked.connect(lambda:self.close())
-        self.min_btn.clicked.connect(lambda:self.showMinimized())
-        self.max_btn.clicked.connect(self.showMax)
-        
-        
+        self.btn_window.closeBtn.connect(lambda:self.close())
+        self.btn_window.minBtn.connect(lambda:self.showMinimized())
+        self.btn_window.maxBtn.connect(self.showMax)
         
         self.tool_layout.addItem(self.spacer)
-        self.tool_layout.addWidget(self.min_btn)
-        self.tool_layout.addWidget(self.max_btn)
-        self.tool_layout.addWidget(self.close_btn)
+        self.tool_layout.addWidget(self.btn_window.min_btn)
+        self.tool_layout.addWidget(self.btn_window.max_btn)
+        self.tool_layout.addWidget(self.btn_window.close_btn)
         
         
         #SIDE BAR BUTTONS 
@@ -224,8 +223,9 @@ class Home(Window):
                                           **btn_args_constants)
         
         self.btn_history_page.onPage(self.pages,self.manager_pages.history_page)
-        self.btn_history_page.setPattern("Historico","history")        
-        
+        self.btn_history_page.setPattern("Historico","history")   
+
+
         self.spacer_side = QSpacerItem(20,20,
                                        QSizePolicy.Policy.Minimum,
                                        QSizePolicy.Policy.Expanding)
@@ -294,6 +294,8 @@ class Home(Window):
         self.setCentralWidget(self.main_frame)
         
         self.setProperty("class",["bg-primary"])
+        
+        self.setWindowIcon(self.img_manager.get_ico_by_png("icon"))
 
         
     def resizeEvent(self, event:QResizeEvent):

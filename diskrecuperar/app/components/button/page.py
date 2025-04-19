@@ -70,3 +70,40 @@ class ButtonPage(PushButton):
                 self.setChecked(False)
             
         
+        
+        
+        
+class ButtonWindow(QWidget):
+    
+    
+        
+    @property
+    def maxBtn(cls):
+        return cls.max_btn.clicked
+            
+    @property
+    def minBtn(cls):
+        return cls.min_btn.clicked
+               
+    @property
+    def closeBtn(cls):
+        return cls.close_btn.clicked
+    
+    
+    def __init__(self):
+        super().__init__()
+        
+        self.setup()
+            
+            
+    def setup(self):
+        
+        
+        self.close_btn = QToolButton()
+        self.min_btn = QToolButton()
+        self.max_btn = QToolButton()
+        
+        
+        self.close_btn.setProperty("class",["btn-radius","bg-red"])
+        self.min_btn.setProperty("class",["btn-radius","bg-green"])
+        self.max_btn.setProperty("class",["btn-radius","bg-orange"])

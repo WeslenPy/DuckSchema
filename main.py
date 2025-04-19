@@ -1,10 +1,9 @@
-
-
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 
 from PySide6 import QtWidgets,QtCore,QtGui
 from diskrecuperar.app.window.layout.home.window import Home
+from diskrecuperar.app.window.layout.security.window import Login
 from diskrecuperar.database.config.base import Model
 from diskrecuperar.database.config.conn import engine
 from diskrecuperar.database.model import *
@@ -25,8 +24,8 @@ if __name__ == "__main__":
             f"onefile_{ int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp",
         )
 
-    if os.path.exists(splash_filename):
-        os.unlink(splash_filename)
+        if os.path.exists(splash_filename):
+            os.unlink(splash_filename)
 
 
 
@@ -39,7 +38,7 @@ if __name__ == "__main__":
     FontManager().load_all_fonts()
     CssManager().load_all_css(app=app)
     
-    window = Home()
+    window = Login()
     window.show()
     window.setFocus()
     Model.metadata.create_all(engine)

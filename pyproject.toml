@@ -20,8 +20,6 @@ dependencies = [
 ]
 
 
-[tool.poetry.dependencies]
-python3 = ">=3.9,<4.0"
 
 
 [tool.briefcase]
