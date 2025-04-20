@@ -17,6 +17,10 @@ from diskrecuperar.utils.manager.css import CssManager
 from diskrecuperar.utils.manager.image import ImageManager
 
 from diskrecuperar.app.components.message.widget import MessageBox
+from diskrecuperar.app.window.layout.home.window import Home
+
+
+
 
 class Login(Window):
     
@@ -89,6 +93,8 @@ class Login(Window):
             
     def setup(self):
         
+        
+        
         #FRAME DO TITLE BAR
         
         self.main_frame = QFrame(self)
@@ -144,13 +150,15 @@ class Login(Window):
         self.tool_layout.addWidget(self.btn_window.close_btn)
         
         
-        
            
         self.pages = QStackedWidget()
         self.manager_pages = PageManager(stack=self.pages)
         
         # DEFINE A PRIMEIRA PAGE
         self.pages.setCurrentWidget(self.manager_pages.login_page) 
+        
+        
+        self.manager_pages.login_page.change_window.connect(self.changeToHome)
         
         
         self.content_frame = QFrame()
@@ -187,6 +195,11 @@ class Login(Window):
         
         self.setWindowIcon(self.img_manager.get_ico_by_png("icon"))
 
+
+
+    def changeToHome(self):
+        Home().show()
+        self.close()
         
     def resizeEvent(self, event:QResizeEvent):
     #    print(event.size())

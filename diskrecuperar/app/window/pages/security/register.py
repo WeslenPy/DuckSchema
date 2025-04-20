@@ -7,7 +7,8 @@ from PySide6.QtSvg import *
 from diskrecuperar.utils.manager.image import ImageManager
 from diskrecuperar.app.components.input.widget import InputPassword,InputEmail
 from diskrecuperar.app.components.button.widget import PushButton
-
+from diskrecuperar.app.components.message.popup import PopUp
+from diskrecuperar.api.diskapi.api import RequestManager
 
 class RegisterPage(QWidget):
     def __init__(self, parent:QStackedWidget = None) -> None:
@@ -15,6 +16,7 @@ class RegisterPage(QWidget):
         self.stack:QStackedWidget = parent
         
         self.manager = ImageManager()
+        self.request = RequestManager()
         
         self.setup()
         
@@ -71,12 +73,13 @@ class RegisterPage(QWidget):
         self.buttons_layout.setContentsMargins(0,0,0,50)
         
         
-        self.login_btn = PushButton(name="Registrar")
+        self.register_btn = PushButton(name="Registrar")
         self.back_btn = PushButton(name="Voltar")
       
         self.back_btn.clicked.connect(self.changePage)
+        self.register_btn.clicked.connect(self.checkRegister)
         
-        self.login_btn.setProperty("class",["btn-login",
+        self.register_btn.setProperty("class",["btn-login",
                                             "mb-2","fs-2"])
         
         
@@ -84,12 +87,14 @@ class RegisterPage(QWidget):
                                                "fs-2"])
         
         
-        self.buttons_layout.addWidget(self.login_btn)
+        self.buttons_layout.addWidget(self.register_btn)
         self.buttons_layout.addWidget(self.back_btn)
         
+        self.content_layout = QVBoxLayout(self.content_frame)
         
                 
-        self.content_layout = QVBoxLayout(self.content_frame)
+        self.popup = PopUp(self)
+        self.content_layout.addWidget(self.popup)
         
         self.content_layout.addWidget(self.logo_frame)
         self.content_layout.addWidget(self.form_frame)
@@ -100,6 +105,48 @@ class RegisterPage(QWidget):
         
         self.stack.addWidget(self)
                 
+         
+        
+    def responseData(self,response:dict):
+        
+        data:dict = response.get("data",{})
+        
+        message:dict = data.get("message","Erro ao processar dados!")
+        error = data.get("error",True)
+        if error:
+            return self.popup.showMessageError(
+                message=message)      
+            
+            
+        self.popup.showMessageSuccess(
+                message=message,onclick=self.changePage) 
+        
+            
+    def checkRegister(self):
+        
+        email = self.input_email.text()
+        password = self.input_password.text()
+        
+        if not self.input_email.checkField():
+            return self.popup.showMessageError(
+                message="Preencha o campo de e-mail corretamente!") 
+        
+              
+        elif not self.input_password.checkField():
+            return self.popup.showMessageError(
+                message="Preencha o campo de senha corretamente!") 
+        
+        
+        self.request.post(
+                        url=self.request.url.register,
+                        data=dict(email=email,
+                                    password=password))
+
+        
+        self.request.request_finished.connect(self.responseData)
+    
+        
+        
         
     def changePage(self):
         self.stack.setCurrentIndex(2)

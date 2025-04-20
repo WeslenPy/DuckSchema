@@ -16,6 +16,7 @@ dependencies = [
     "marshmallow-sqlalchemy (>=1.4.1)",
     "briefcase (>=0.3.22)",
     "pyside6 (>=6.9.0,<7.0.0)",
+    "cryptography (==43.0.0)",
 
 ]
 

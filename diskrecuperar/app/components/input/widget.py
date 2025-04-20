@@ -8,7 +8,7 @@ from diskrecuperar.app.components.icon.widget import Icon
 from diskrecuperar.app.components.button.widget import PushButton
 
 from diskrecuperar.utils.manager.image import ImageManager
-
+import re
 
 class InputText(QFrame):
     
@@ -146,6 +146,13 @@ class InputForm(QFrame):
             QFrame:hover{
                 border: 1.5px solid #45c484;
             }
+            
+            QFrame[valid="true"] {
+                border: 2px solid #45c484;
+            }
+            QFrame[valid="false"] {
+                border: 2px solid #ff5252;
+            }
         """
         
         
@@ -168,15 +175,11 @@ class InputForm(QFrame):
 
         self.funcs[0](e)
         
-        return  e.accept()
-        
-        
     def focusInputOut(self,e:QFocusEvent):
         self.frame_control.setStyleSheet(self.normal)
         
         self.funcs[1](e)
         
-        return  e.accept()
         
     def _setup(self):
         
@@ -197,7 +200,6 @@ class InputForm(QFrame):
         self.input_field = QLineEdit()
         self.input_field.setPlaceholderText(self.textPlaceHolder)
         self.input_field.setProperty("class",["form-control"])
-        self.input_field.setFrame(False)
         self.input_field.setCursor(Qt.CursorShape.PointingHandCursor)
         
         
@@ -313,7 +315,7 @@ class InputForm(QFrame):
 
 class InputPassword(InputForm):
     
-    ECHO = QLineEdit.EchoMode.PasswordEchoOnEdit
+    ECHO = QLineEdit.EchoMode.Password
     
     def __init__(self, parent=None, text: str = ""):
         super().__init__(parent, text)
@@ -328,7 +330,20 @@ class InputPassword(InputForm):
         
         self.icon_btn.clicked.connect(self.cleanPassword)
         
-                
+    def focusInputOut(self, e: QFocusEvent):
+        self.checkField()
+        return super().focusInputOut(e)
+        
+        
+    def checkField(self):
+        text = self.input_field.text()
+        if len(text) >=4:
+            self.frame_control.setProperty("valid",True)
+            return True
+        else:
+            self.frame_control.setProperty("valid",False)
+            return False
+           
         
     def cleanPassword(self):
         
@@ -349,13 +364,26 @@ class InputEmail(InputForm):
         
     def setup(self):
         
+        
         self.setEcho(QLineEdit.EchoMode.Normal)
         
         self.setTitle("E-mail")
         self.setHiddenIcon(True)
         
-
+    def focusInputOut(self, e: QFocusEvent):
+        self.checkField()
+        return super().focusInputOut(e)
         
+        
+    def checkField(self):
+        text = self.input_field.text()
+        if len(text)>=0 and  re.match(r"^[\w\.-]+@[\w\.-]+\.\w{2,4}$", text):
+            self.frame_control.setProperty("valid",True)
+            
+            return True
+        else:
+            self.frame_control.setProperty("valid",False)
+            return False
         
     
 class InputNumber(InputText):

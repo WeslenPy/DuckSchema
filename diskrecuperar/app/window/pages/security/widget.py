@@ -1,3 +1,4 @@
+from distutils.util import change_root
 from tkinter.tix import ButtonBox
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
@@ -9,13 +10,21 @@ from diskrecuperar.app.components.input.widget import InputPassword,InputEmail
 from diskrecuperar.app.components.button.widget import PushButton
 
 from diskrecuperar.app.components.message.popup import PopUp
+from diskrecuperar.api.diskapi.api import RequestManager
+from diskrecuperar.database.model.client.authModel import Auth
+
 
 class LoginPage(QWidget):
+    
+    change_window = Signal(bool)
+    
     def __init__(self, parent:QStackedWidget = None) -> None:
         super().__init__()
         self.stack:QStackedWidget = parent
         
         self.manager = ImageManager()
+        
+        self.request = RequestManager()
         
         self.setup()
         
@@ -115,24 +124,49 @@ class LoginPage(QWidget):
         
         
         
+    def responseData(self,response:dict):
+        
+        data:dict = response.get("data",{})
+        
+        message:dict = data.get("message","Erro ao processar dados!")
+        error = data.get("error",True)
+        if error:
+            return self.popup.showMessageError(
+                message=message)      
+            
+        auth= Auth(token=data.get("access_token"),
+                   email= self.input_email.text(),
+                   password=self.input_password.text())
+
+        auth.save()
+            
+        self.popup.showMessageSuccess(
+                message=message) 
+        
+        self.change_window.emit(True)
+        self.close()
+        
     def checkLogin(self):
         
-        if len(self.input_email.text()) <=0:
+        email = self.input_email.text()
+        password = self.input_password.text()
+        
+        if not self.input_email.checkField():
             return self.popup.showMessageError(
                 message="Preencha o campo de e-mail corretamente!") 
         
               
-        elif len(self.input_password.text()) <=0:
+        elif not self.input_password.checkField():
             return self.popup.showMessageError(
                 message="Preencha o campo de senha corretamente!") 
         
         
-        
-        
-        return self.popup.showMessageSuccess(
-                message="Login efetuado com sucesso!") 
-        
-        
+        self.request.form(
+                        url=self.request.url.auth,
+                        data=dict(username=email,
+                                    password=password))
+
+        self.request.request_finished.connect(self.responseData)
         
         
     def changePage(self):

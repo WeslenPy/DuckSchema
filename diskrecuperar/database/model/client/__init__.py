@@ -1,2 +1,6 @@
-from .register import *
-from .history import *
+from .authModel import Auth
+
+
+__all__ = [
+    "Auth"
+]

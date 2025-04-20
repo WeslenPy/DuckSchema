@@ -72,7 +72,7 @@ class PopUp(QFrame):
         
         
         
-    def showMessageSuccess(self,message):
+    def showMessageSuccess(self,message,onclick=None):
         
         self.setStyleSheet("""
                             QFrame{
@@ -103,6 +103,11 @@ class PopUp(QFrame):
                     """)
         
         
+        self.btn_close.clicked.connect(self.closeMessage)
+        
+        if onclick:
+            self.btn_close.clicked.connect(onclick)
+        
         
         self.message_label.setText(message)
         self.setHidden(False)
@@ -111,6 +116,7 @@ class PopUp(QFrame):
         self.setHidden(False)
         self.message_label.setText(message)
         
+        self.btn_close.clicked.connect(self.closeMessage)
                
         
         self.btn_close.setStyleSheet("""
