@@ -8,9 +8,8 @@ from diskrecuperar.utils.manager.image import ImageManager
 from diskrecuperar.app.components.input.widget import InputPassword,InputEmail
 from diskrecuperar.app.components.button.widget import PushButton
 
-from diskrecuperar.app.components.message.popup import PopUp
 
-class LoginPage(QWidget):
+class RegisterPage(QWidget):
     def __init__(self, parent:QStackedWidget = None) -> None:
         super().__init__()
         self.stack:QStackedWidget = parent
@@ -47,16 +46,13 @@ class LoginPage(QWidget):
         self.label_logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.label_logo.setPixmap(self.manager.get_png(filename="icon"))
-        self.label_subtitle.setText("Insira suas credencias de login abaixo:")
+        self.label_subtitle.setText("Cadastre-se aqui:")
         self.label_subtitle.setProperty("class",["fs-2","font-robot",
                                                  "fs-w-400","mt-2"])
         
         
-        
         self.logo_layout.addWidget(self.label_logo)
         self.logo_layout.addWidget(self.label_subtitle)
-        # self.logo_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
         
         
         self.form_layout = QVBoxLayout(self.form_frame)
@@ -75,34 +71,25 @@ class LoginPage(QWidget):
         self.buttons_layout.setContentsMargins(0,0,0,50)
         
         
-        self.login_btn = PushButton(name="Entrar")
-        self.register_btn = PushButton(name="Criar conta")
-        
-        self.login_btn.clicked.connect(self.checkLogin)
-        
-        self.register_btn.clicked.connect(self.changePage)
+        self.login_btn = PushButton(name="Registrar")
+        self.back_btn = PushButton(name="Voltar")
       
+        self.back_btn.clicked.connect(self.changePage)
         
         self.login_btn.setProperty("class",["btn-login",
                                             "mb-2","fs-2"])
         
         
-        self.register_btn.setProperty("class",["btn-transparent",
+        self.back_btn.setProperty("class",["btn-transparent",
                                                "fs-2"])
         
         
         self.buttons_layout.addWidget(self.login_btn)
-        self.buttons_layout.addWidget(self.register_btn)
+        self.buttons_layout.addWidget(self.back_btn)
+        
         
                 
         self.content_layout = QVBoxLayout(self.content_frame)
-        
-        self.popup = PopUp(self)
-        # self.popup.showMessageSuccess("teste")
-        
-        
-        
-        self.content_layout.addWidget(self.popup)
         
         self.content_layout.addWidget(self.logo_frame)
         self.content_layout.addWidget(self.form_frame)
@@ -112,28 +99,7 @@ class LoginPage(QWidget):
         self.main_layout.addWidget(self.content_frame)
         
         self.stack.addWidget(self)
-        
-        
-        
-    def checkLogin(self):
-        
-        if len(self.input_email.text()) <=0:
-            return self.popup.showMessageError(
-                message="Preencha o campo de e-mail corretamente!") 
-        
-              
-        elif len(self.input_password.text()) <=0:
-            return self.popup.showMessageError(
-                message="Preencha o campo de senha corretamente!") 
-        
-        
-        
-        
-        return self.popup.showMessageSuccess(
-                message="Login efetuado com sucesso!") 
-        
-        
-        
+                
         
     def changePage(self):
-        self.stack.setCurrentIndex(3)
+        self.stack.setCurrentIndex(2)

@@ -8,6 +8,7 @@ from PySide6.QtWidgets import *
 from diskrecuperar.utils.manager.image import ImageManager
 
 
+
 class MessageBox(Window):
     close_box = Signal(bool)
     accept_box = Signal(bool)

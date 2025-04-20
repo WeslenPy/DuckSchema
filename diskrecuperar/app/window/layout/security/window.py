@@ -30,7 +30,7 @@ class Login(Window):
     def __init__(self):
         super().__init__()
         
-        self.setMinimumSize(600,720)
+        self.setMinimumSize(500,720)
         self.point_step = QtCore.QPoint()
         self.point_step.setX(-100)
         self.point_step.setY(-10)
@@ -99,6 +99,8 @@ class Login(Window):
         self.box_frame = QFrame()
         self.box_frame.setProperty(
             "class",["bg-primary","frame-radius"])  
+        
+        
         # self.box_frame.setMaximumWidth(200)      
         
         self.title_layout = QVBoxLayout(self.main_frame) # TOP LAYOUT
@@ -140,6 +142,7 @@ class Login(Window):
         self.tool_layout.addWidget(self.btn_window.min_btn)
         self.tool_layout.addWidget(self.btn_window.max_btn)
         self.tool_layout.addWidget(self.btn_window.close_btn)
+        
         
         
            
