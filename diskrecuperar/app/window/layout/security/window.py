@@ -9,14 +9,13 @@ from diskrecuperar.app.components.grip.widget import (GripTop,
 
 
 
-from diskrecuperar.app.components.button.page import ButtonPage,ButtonWindow
-from diskrecuperar.app.window.stack.manager import PageManager
+from diskrecuperar.app.components.button.page import ButtonWindow
+from diskrecuperar.app.window.stack.manager import PageLogin
 from diskrecuperar.app.components.window.widget import Window
-from PySide6 import QtCore,QtWidgets,QtGui
+from PySide6 import QtCore,QtGui
 from diskrecuperar.utils.manager.css import CssManager
 from diskrecuperar.utils.manager.image import ImageManager
 
-from diskrecuperar.app.components.message.widget import MessageBox
 from diskrecuperar.app.window.layout.home.window import Home
 
 
@@ -152,7 +151,7 @@ class Login(Window):
         
            
         self.pages = QStackedWidget()
-        self.manager_pages = PageManager(stack=self.pages)
+        self.manager_pages = PageLogin(stack=self.pages)
         
         # DEFINE A PRIMEIRA PAGE
         self.pages.setCurrentWidget(self.manager_pages.login_page) 

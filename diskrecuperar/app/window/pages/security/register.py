@@ -149,4 +149,4 @@ class RegisterPage(QWidget):
         
         
     def changePage(self):
-        self.stack.setCurrentIndex(2)
+        self.stack.setCurrentIndex(0)

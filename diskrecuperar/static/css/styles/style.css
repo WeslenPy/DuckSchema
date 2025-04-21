@@ -105,6 +105,7 @@
   color: #000;
   padding-left: 10px;
   padding-top: 5px;
+  outline:none;
   font-size:14px;
   padding-bottom: 5px;
   background-repeat: none;
@@ -249,6 +250,7 @@
   padding-right: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  outline:none;
   margin-left: 5px;
   color: white;
   
@@ -259,6 +261,7 @@
   background-color:  transparent;
   color: white;
   padding:10px;
+  outline:none;
 
 }
 
@@ -269,6 +272,7 @@
   background-color:  #306e33;
   background:  #306e33;
   color: white;
+  outline:none;
 
   padding:10px;
 
@@ -282,6 +286,7 @@
   background-color:  #45c484;
   background:  #45c484;
   color: white;
+  outline:none;
 
   padding:10px;
 
@@ -296,17 +301,20 @@
   background-color: white;
   color: #45c484;
 
+  outline:none;
   padding:10px;
 
 }
 
 .btn-transparent:hover{
   background-color: rgb(50, 192, 57);
+  outline:none;
   color: #fff;
 
 }
 .btn-login:hover{
   background-color: rgb(50, 192, 57);
+  outline:none;
   color: #fff;
 
 }
@@ -316,6 +324,7 @@
   border-radius: 10px;
   background-color:  #c94f2b;
   background:   #c94f2b;
+  outline:none;
   color: white;
 
   padding-left:10px;
@@ -328,6 +337,7 @@
   border-radius: 10px;
   background-color:rgba(0,0,0,0.7);
   color: white;
+  outline:none;
 
   padding-left:10px;
   padding-right:10px;
@@ -349,6 +359,7 @@
   background-color:  #3aa6d1;
   background: #3aa6d1;
   color: white;
+  outline:none;
   padding:10px;
 }
 

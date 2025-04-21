@@ -26,40 +26,42 @@ class Auth(BaseModel, Model):
     
     
     @property
-    def email(cls):
-        return cls._email
+    def email(self):
+        return self._email
         
     @property
-    def password(cls):
-        return cls._password
+    def password(self):
+        return self._password
     
     
     @email.getter
-    def email(cls):
-        return EncryptProvider().decrypt_field(cls.email)
+    def email(self):
+        return EncryptProvider().decrypt_field(self._email)
 
     @password.getter
-    def password(cls):
-        return EncryptProvider().decrypt_field(cls.password)
+    def password(self):
+        return EncryptProvider().decrypt_field(self._password)
     
     
     @email.setter
-    def email(cls,value):
+    def email(self,value):
         email=  EncryptProvider().encrypt_field(value)
 
-        cls._email = email
+        self._email = email
 
     @password.setter
-    def password(cls,value):
+    def password(self,value):
         
         password = EncryptProvider().encrypt_field(value)
         
-        cls._password = password
+        self._password = password
 
 
     def __init__(self, token: str, 
                         email: str, 
                         password: str, **kwargs):
+        
+        super().__init__(**kwargs)
         
         self.token = token
         self.email = email
@@ -68,7 +70,11 @@ class Auth(BaseModel, Model):
         
         
         
+    @classmethod
+    def get_first_row(cls):
         
+        return super().get_first_row(
+            rows=[cls._email,cls._password,cls.token])
 
     @classmethod
     def get_user_by_email(

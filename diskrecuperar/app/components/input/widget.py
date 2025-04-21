@@ -200,7 +200,7 @@ class InputForm(QFrame):
         self.input_field = QLineEdit()
         self.input_field.setPlaceholderText(self.textPlaceHolder)
         self.input_field.setProperty("class",["form-control"])
-        self.input_field.setCursor(Qt.CursorShape.PointingHandCursor)
+        # self.input_field.setCursor(Qt.CursorShape.WhatsThisCursor)
         
         
         self.icon_btn = QPushButton()
@@ -312,6 +312,37 @@ class InputForm(QFrame):
         return  self.input_field.focusOutEvent(e)
     
 
+
+class InputSearch(InputForm):
+    
+    ECHO = QLineEdit.EchoMode.Normal
+    
+    def __init__(self, parent=None, text: str = ""):
+        super().__init__(parent, text)
+        
+        self.setup()
+        
+    def setup(self):
+        
+        self.setEcho(self.ECHO)
+        self.setTitle("")
+        self.setIcon(icon=self.image.get_svg("search"))
+        
+        
+    def focusInputOut(self, e: QFocusEvent):
+        # self.checkField()
+        return super().focusInputOut(e)
+        
+        
+    # def checkField(self):
+    #     text = self.input_field.text()
+    #     if len(text) >=4:
+    #         self.frame_control.setProperty("valid",True)
+    #         return True
+    #     else:
+    #         self.frame_control.setProperty("valid",False)
+    #         return False
+           
 
 class InputPassword(InputForm):
     
@@ -455,77 +486,3 @@ class InputButton(InputText,Icon):
         
         self.layout_h.addWidget(button_action)
     
-    
-            
-class InputSearch(InputText,Icon):
-    def __init__(self,parent=None,text:str=""):
-        super().__init__(parent=parent,text=text)
-
-        self.list_items = []
-        self.search_enable =False
-        
-        self.setup()
-        
-        self.input_field.mousePressEvent = self.mousePressAll
-        
-    def mousePressAll(self,event:QMouseEvent):
-        self.selectAll()
-        return self.mousePressEvent(event)
-        
-        
-    def addSearchAction(self):
-        
-        search_action = self.search
-        # search_action.set
-        return  self.addAction(search_action,
-                               QLineEdit.ActionPosition.TrailingPosition)
-        
-    def enabledSearch(self):
-        self.search_enable  = not self.search_enable
-        if self.search_enable:
-            self.search_action.setIcon(self.cancel)
-            
-        else:
-            self.clear()
-            self.search_action.setIcon(self.search)
-            
-    def wheelEvent(self, e: QWheelEvent) -> None:
-        return super().wheelEvent(e)
-            
-    def setup(self):
-        
-        
-        self.search_action =self.addSearchAction()
-        self.search_action.triggered.connect(self.enabledSearch)
-        
-        
-         
-        self.setAutoFillBackground(False)
-        
-        self.editingFinished.connect(self.addEntry)
-
-        self.model = QStandardItemModel(self)
-        
-        self.completer_input = QCompleter(self.model, self)
-        self.completer_input.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
-        self.completer_input.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-        self.completer_input.setMaxVisibleItems(5)
-        self.setCompleter(self.completer_input)
-        
-        self.installEventFilter(self.completer_input)
-        self.installEventFilter(self.model)
-        
-        
-        for row in self.list_items:
-            self.model.appendRow(QStandardItem(row))
-            
-        
-        self.setProperty("class",["form-input","input-search"])
-
-    def addEntry(self):
-        entryItem = self.text()
-        self.list_items.append(entryItem)
-
-        if not self.model.findItems(entryItem):
-            self.model.appendRow(QStandardItem(entryItem))
-

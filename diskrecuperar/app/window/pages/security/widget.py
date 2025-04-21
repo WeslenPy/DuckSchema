@@ -13,6 +13,7 @@ from diskrecuperar.app.components.message.popup import PopUp
 from diskrecuperar.api.diskapi.api import RequestManager
 from diskrecuperar.database.model.client.authModel import Auth
 
+from diskrecuperar.database.config.conn import get_session
 
 class LoginPage(QWidget):
     
@@ -61,12 +62,8 @@ class LoginPage(QWidget):
                                                  "fs-w-400","mt-2"])
         
         
-        
         self.logo_layout.addWidget(self.label_logo)
         self.logo_layout.addWidget(self.label_subtitle)
-        # self.logo_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        
         
         self.form_layout = QVBoxLayout(self.form_frame)
         self.form_layout.setContentsMargins(0,40,0,0)
@@ -123,10 +120,22 @@ class LoginPage(QWidget):
         self.stack.addWidget(self)
         
         
-        
+        with get_session() as session:
+            
+            auth:Auth = session.query(Auth).order_by(Auth._id.desc()).first()
+            
+            if auth:
+                self.input_email.setText(auth.email)
+                self.input_password.setText(auth.password)
+            
+            
+            
     def responseData(self,response:dict):
         
         data:dict = response.get("data",{})
+        
+        self.login_btn.setDisabled(False)
+        
         
         message:dict = data.get("message","Erro ao processar dados!")
         error = data.get("error",True)
@@ -147,6 +156,8 @@ class LoginPage(QWidget):
         self.close()
         
     def checkLogin(self):
+        
+        self.login_btn.setDisabled(True)
         
         email = self.input_email.text()
         password = self.input_password.text()
@@ -169,5 +180,7 @@ class LoginPage(QWidget):
         self.request.request_finished.connect(self.responseData)
         
         
+        
+        
     def changePage(self):
-        self.stack.setCurrentIndex(3)
+        self.stack.setCurrentIndex(1)

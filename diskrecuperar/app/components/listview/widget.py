@@ -10,78 +10,66 @@ from diskrecuperar.utils.manager.path import BasePath
 from diskrecuperar.utils.manager.download import DownloadTask
 
 from PySide6.QtCore import QThreadPool
-class ListWidget(QListWidget):
+
+
+
+class ListWidget(QFrame):
     
     def __init__(self, parent=None,relative:QWidget=None):
         
         super().__init__(parent=parent)
         
-        # self.hide()
-        
-        self.parentWindow:QMainWindow =parent
-        
         self.relative:QWidget = relative
-        
 
-        self.setProperty("class",["list-view"])
-
-        self.shadow = QGraphicsDropShadowEffect(self)
-        self.shadow.setBlurRadius(15)
-        self.shadow.setXOffset(0)
-        self.shadow.setYOffset(0)
-        self.shadow.setColor(QColor(0, 0, 0, 160))
-        self.setGraphicsEffect(self.shadow)
-
-        self.opacity = QGraphicsOpacityEffect(self)
-        self.opacity.setOpacity(0.85)
-        self.setGraphicsEffect(self.opacity)
+        self.setHidden(True)
+        self.setup()
         
- 
-        self.timer = QTimer()
-        self.timer.setInterval(1000)
-        self.timer.setTimerType(Qt.TimerType.CoarseTimer)
         
+    def setup(self):
+            
+        self.list_frame = QFrame(self)
+        
+        self.list_layout = QVBoxLayout(self.list_frame)
+        self.list_layout.setContentsMargins(10,0,10,0)
+        self.list_layout.setSpacing(0)
+                
+
+        self.top_frame_list = QFrame()
+        self.top_frame_list.setProperty("class",["bg-secondary","top-frame"])
+        self.top_frame_list.setMinimumHeight(55)
+        
+        
+        self.top_frame_layout =QVBoxLayout(self.top_frame_list)
+        self.top_frame_layout.setContentsMargins(0,0,0,0)
+        self.top_frame_layout.setSpacing(0)
+        
+        
+        self.top_label_list = QLabel()
+        self.top_label_list.setText("Resultado da sua busca".upper())
+        self.top_label_list.setProperty("class",["text-white",
+                                                 "fs-2",
+                                                 "fs-wg-8"])
+        
+        
+        self.top_label_list.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        self.top_frame_layout.addWidget(self.top_label_list)
+        
+        self.list_search = QListWidget()
+        
+        self.list_search.setProperty("class",["list-view"])
+        
+        self.list_layout.addWidget(self.top_frame_list)
+        self.list_layout.addWidget(self.list_search)
+        
+        self.setLayout(self.list_layout)
+        
+        
+    def addItem(self,item):
+        
+        self.setHidden(False)
+        self.list_search.addItem(item)
          
-         
-    def endAnimation(self,hide:bool):
-        self.setHidden(hide)
-               
-    def callAnimation(self):
-        self.timer.timeout.connect(lambda:self.moveToolTip(True,True))
-        self.timer.start()
-   
-    def moveToolTip(self,invert:bool=False,hide:bool=False,duration:int=850):
-        gp = self.relative.mapToGlobal(QPoint(0, 0))
-
-        pos = self.parentWindow.mapFromGlobal(gp)
-        
-        pos_x = pos.x() + self.relative.width() + 12
-        pos_y = pos.y()-15 + (self.height()// 2)
-        
-        old_point =  QRect(pos.x()+self.width()+self.relative.width(),pos.y(),self.width(),self.height())
-        point = QRect(pos_x,pos_y,self.width(),self.height())
-        
-        self.animation = QPropertyAnimation(self,b"geometry")
-        self.animation.setStartValue(old_point if not invert else point)
-        self.animation.setEndValue(point if not invert else old_point)
-        self.animation.setDuration(duration)
-        self.animation.setEasingCurve(QEasingCurve.Type.OutBounce)
-        
-        self.animation_opacity = QPropertyAnimation(self.opacity, b"opacity")
-        self.animation_opacity.setStartValue(0 if not invert else 1 )
-        self.animation_opacity.setEndValue(1 if not invert else 0)
-        self.animation_opacity.setDuration(duration)
-        
-        self.anim_group = QParallelAnimationGroup()
-        self.anim_group.addAnimation(self.animation)
-        self.anim_group.addAnimation(self.animation_opacity)
-        
-        self.anim_group.finished.connect(lambda:self.endAnimation(hide=hide))
-        self.anim_group.start()
-        
-        self.timer.stop()
-        
-        
         
         
 class ItemView(QWidget):

@@ -16,3 +16,11 @@ class PageManager:
         self.login_page = LoginPage(stack)
         self.register_page = RegisterPage(stack)
         
+        
+class PageLogin:
+    def __init__(self,stack:QStackedWidget) -> None:
+        
+        self.login_page = LoginPage(stack)
+        self.register_page = RegisterPage(stack)
+        
+        

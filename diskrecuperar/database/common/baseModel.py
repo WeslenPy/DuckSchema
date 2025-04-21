@@ -5,11 +5,11 @@ from sqlalchemy import (
     Column,
     DateTime,
     Integer,
+    select,
+    desc,
 )
 from sqlalchemy.orm import Session
-from diskrecuperar.database.config.conn import Session as SessionMaker
-from typing import Generator
-from contextlib import contextmanager
+from diskrecuperar.database.config.conn import get_session
 
 
 class BaseModel:
@@ -58,23 +58,19 @@ class BaseModel:
     @property
     def update_at(cls) -> Column[datetime]:
         return cls._update_at
-    
-    
 
-    @contextmanager
-    def get_session(self, session: Session = None
-                    ) -> Generator[Session, None, None]:
-        if session:
-            yield session 
-        else:
-            session = SessionMaker()
-            try:
-                yield session
-            finally:
-                session.close() 
+
+    @classmethod
+    def get_first_row(cls,rows):
+        
+        with get_session() as session:
+            
+            return session.scalars(select(*rows
+                                    ).order_by(desc(cls._id))).first()
+
 
     def save(self, session: Session=None):
-        with self.get_session(session=session) as _session:
+        with get_session(session=session) as _session:
             _session:Session
             
             _session.add(instance=self)
@@ -85,7 +81,7 @@ class BaseModel:
         return self
 
     def delete(self, _id: int, session: Session=None) -> bool:
-        session = self.get_session(session=session)
+        session = get_session(session=session)
         
         row = session.query(self).filter(self.id == _id).first()
 
@@ -97,7 +93,7 @@ class BaseModel:
         return False
 
     def update(self, data: dict, session: Session=None):
-        session = self.get_session(session=session)
+        session = get_session(session=session)
         
         for key, value in data.items():
             if key == 'id':
