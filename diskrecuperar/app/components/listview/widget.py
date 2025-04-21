@@ -65,6 +65,14 @@ class ListWidget(QFrame):
         self.setLayout(self.list_layout)
         
         
+        
+    def clearItems(self):
+        self.list_search.clear()
+        
+        
+    def setItemWidget(self,item,widget):
+        self.list_search.setItemWidget(item,widget)
+        
     def addItem(self,item):
         
         self.setHidden(False)
@@ -114,17 +122,17 @@ class ItemView(QWidget):
         self.progress_bar_download.setRange(0, 100)
         self.progress_bar_download.hide()
         
-        label_title = QLabel()
+        self.label_title = QLabel()
         
-        label_title.setText("teste")
-        label_title.setProperty("class",["text-white","fs-2","fs-w-400"])
+        self.label_title.setText("teste")
+        self.label_title.setProperty("class",["text-white","fs-2","fs-w-400"])
         
         self.button_download = PushAction(icon="download")
         self.button_download.clicked.connect(self.onclickDownload)         
         
         self.button_cancel = PushAction(icon="cancel")
         # self.button_cancel.clicked.connect(self.onclickCancel) 
-        self.button_cancel.setProperty("class",["btn-cancel"])
+        self.button_cancel.setProperty("class",["btn-download-cancel"])
         self.button_cancel.hide()
         
         self.button_like = PushAction(icon="like")
@@ -138,7 +146,7 @@ class ItemView(QWidget):
         self.button_open_folder.hide()
         
         
-        actions_layout.addWidget(label_title)
+        actions_layout.addWidget(self.label_title)
         actions_layout.addWidget(self.button_star)
         actions_layout.addWidget(self.button_like)
         actions_layout.addWidget(self.button_download)
@@ -153,6 +161,9 @@ class ItemView(QWidget):
         
         
         self.setLayout(container_layout)
+        
+    def setText(self,text:str):
+        self.label_title.setText(text)
         
 
     def setURLDownload(self,url:str):

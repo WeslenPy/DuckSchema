@@ -14,6 +14,9 @@ from diskrecuperar.api.diskapi.api import RequestManager
 from diskrecuperar.database.model.client.authModel import Auth
 
 from diskrecuperar.database.config.conn import get_session
+from diskrecuperar import TOKEN
+
+
 
 class LoginPage(QWidget):
     
@@ -106,8 +109,6 @@ class LoginPage(QWidget):
         self.popup = PopUp(self)
         # self.popup.showMessageSuccess("teste")
         
-        
-        
         self.content_layout.addWidget(self.popup)
         
         self.content_layout.addWidget(self.logo_frame)
@@ -127,8 +128,7 @@ class LoginPage(QWidget):
             if auth:
                 self.input_email.setText(auth.email)
                 self.input_password.setText(auth.password)
-            
-            
+                TOKEN.token = auth.token
             
     def responseData(self,response:dict):
         

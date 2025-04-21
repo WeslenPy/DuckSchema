@@ -1,23 +1,4 @@
-
-# from diskrecuperar.api.manager.response import Response
-# from httpx import Response
-# import httpx
-
-# class DiskAPI:
-    
-#     def __init__(self) -> None:
-        
-    
-#         self.api = 
-    
-    
-#     def register(self,email:str,password:str) -> Response:
-#         response: Response = httpx.post(,
-#                               json=dict(email=email,password=password))
-        
-        
-#         return Response(response=response)
-    
+from diskrecuperar import TOKEN
 
 import json
 from PySide6.QtCore import (QUrl, QObject, Slot,Signal, 
@@ -26,7 +7,7 @@ from PySide6.QtNetwork import (QNetworkAccessManager,
                                QNetworkRequest, 
                                QNetworkReply, 
                                QSslConfiguration)
-
+from urllib.parse import urlencode
 class URLManager:
     
     URL_BASE = "http://127.0.0.1:8000/api/v1"
@@ -39,7 +20,11 @@ class URLManager:
     @property
     def auth(cls):
         return f"{cls.URL_BASE}/auth/token"
-
+    
+    
+    @property
+    def archive_filter(cls):
+        return f"{cls.URL_BASE}/archive/filter"
 
 class RequestManager(QObject):
     
@@ -55,7 +40,6 @@ class RequestManager(QObject):
         
         self.url = URLManager()
         
-        
     def form(self,url,data:dict):
         request = QNetworkRequest(QUrl(url))
 
@@ -68,9 +52,10 @@ class RequestManager(QObject):
                              "application/x-www-form-urlencoded")
         
         query = QUrlQuery()
-        query.addQueryItem("password",data["password"])
-        query.addQueryItem("username", data["username"])
-
+        for key,value in data.items():
+            query.addQueryItem(key,value)
+            
+            
         data:list = QByteArray()
         data.append(
             query.query(
@@ -78,6 +63,25 @@ class RequestManager(QObject):
                     ).encode("utf-8"))
 
         self.reply = self.manager.post(request,data)
+
+        self._start_timeout(self.reply,10000)
+        
+        
+    def query(self,url,data:dict):
+        
+        query_params =  urlencode(query=data)
+        request = QNetworkRequest(QUrl(f"{url}?{query_params}"))
+
+        # ssl_config: QSslConfiguration = QSslConfiguration.defaultConfiguration()
+        # request.setSslConfiguration(ssl_config)
+
+        request.setRawHeader(b"User-Agent", b"DiskAPI/1.0")
+        request.setRawHeader(b"Accept", b"application/json")
+        request.setRawHeader(b"Authorization", 
+                             f"Bearer {TOKEN.token}".encode())
+
+
+        self.reply = self.manager.get(request)
 
         self._start_timeout(self.reply,10000)
         

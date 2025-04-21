@@ -332,6 +332,19 @@
   max-width: 10px;
 }
 
+
+.btn-download-cancel{
+  border:none;
+  border-radius: 10px;
+  background-color:  #c94f2b;
+  background:   #c94f2b;
+  outline:none;
+  color: white;
+  margin-left: 5px;
+
+  padding:10px;
+}
+
 .btn-success{
   border:none;
   border-radius: 10px;
@@ -370,6 +383,13 @@
 }
 
 .btn-cancel:hover{
+  background-color:  rgb(175, 46, 7);
+  background:   rgb(175, 46, 7);
+  color:#000;
+}
+
+
+.btn-download-cancel:hover{
   background-color:  rgb(175, 46, 7);
   background:   rgb(175, 46, 7);
   color:#000;
