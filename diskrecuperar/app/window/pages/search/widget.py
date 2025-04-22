@@ -9,6 +9,7 @@ from diskrecuperar.app.components.input.widget import InputSearch
 from diskrecuperar.app.components.listview.widget import ListWidget,ItemView
 from diskrecuperar.api.diskapi.api import RequestManager
 from diskrecuperar.utils.manager.debouce import Debounce
+from diskrecuperar.app.components.message.popup import PopUp
 
 
 class SearchPage(QWidget):
@@ -34,11 +35,10 @@ class SearchPage(QWidget):
         self.main_layout.setContentsMargins(5,0,0,0)
         self.main_layout.setSpacing(0)
         
+        
         self.content_frame = QFrame()
         self.search_frame = QFrame()
         
-        
-      
         self.search_layout = QVBoxLayout(self.search_frame)
         self.search_layout.setContentsMargins(0,0,0,0)
         self.search_layout.setSpacing(0)
@@ -59,15 +59,9 @@ class SearchPage(QWidget):
         
         self.list_search = ListWidget(relative=self.content_frame)
         
+        self.popup = PopUp(self)
         
-        # for _ in range(24):
-        #     self.item = QListWidgetItem()
-        #     self.item_widget = ItemView()
-        #     # self.item.setText("Tesete")
-        #     self.list_search.addItem(self.item)
-        #     self.list_search.setItemWidget(self.item,self.item_widget)
-        
-        
+        self.search_layout.addWidget(self.popup)
         self.search_layout.addWidget(self.search_input)
         self.search_layout.addItem(self.spacer_h)
         self.search_layout.addWidget(self.list_search)
@@ -77,7 +71,18 @@ class SearchPage(QWidget):
         self.main_layout.addWidget(self.content_frame)
         
         self.stack.addWidget(self)
+               
+    def showMessage(self,data:dict):
         
+        message:dict = data.get("message","Erro ao processar dados!")
+        error = data.get("error",True)
+        if error:
+            return self.popup.showMessageError(
+                message=message)      
+            
+            
+        self.popup.showMessageSuccess(
+                message=message) 
         
         
     def responseData(self,response:dict):
@@ -100,6 +105,9 @@ class SearchPage(QWidget):
             self.item_widget.setText(archive.get("name",""))
             self.list_search.addItem(item=self.item)
             self.list_search.setItemWidget(self.item,self.item_widget)
+            
+            self.item_widget.onLike.connect(self.showMessage)
+            self.item_widget.onStar.connect(self.showMessage)
         
         
     def searchArchive(self):

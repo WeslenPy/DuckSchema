@@ -42,7 +42,7 @@ class PopUp(QFrame):
                                          """)
         
         self.frame_layout = QHBoxLayout(self.frame_content)
-        self.frame_layout.setContentsMargins(10,10,10,10)
+        self.frame_layout.setContentsMargins(15,10,15,5)
         self.frame_layout.setSpacing(0)
         
         self.message_label = QLabel()

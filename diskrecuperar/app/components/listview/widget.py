@@ -11,6 +11,7 @@ from diskrecuperar.utils.manager.download import DownloadTask
 
 from PySide6.QtCore import QThreadPool
 
+from diskrecuperar.api.diskapi.api import RequestManager
 
 
 class ListWidget(QFrame):
@@ -84,6 +85,15 @@ class ItemView(QWidget):
     
     
     
+    onLike = Signal(dict)
+    onStar = Signal(dict)
+    onCancel = Signal(dict)
+    
+    
+    _liked = False
+    _stared = False
+    
+    
     def __init__(self, parent=None,url:str=None,
                  _id:int=None,directory:str=None,**kwargs):
         
@@ -95,6 +105,8 @@ class ItemView(QWidget):
         
         self.id = _id
         self.pool = QThreadPool()
+        
+ 
         
         self.tasks:list[DownloadTask] = []
         self._setup()
@@ -208,14 +220,79 @@ class ItemView(QWidget):
 
             self.tasks.append(task)
             self.pool.start(task)
+            
+            
+            
+    def onResponseStar(self,response:dict):
+        data:dict = response.get("data",{})
+        error = data.get("error",True)
         
+        favorite:dict = data.get("favorite",{})
+        
+        
+        self._stared = favorite.get("status",False)
+        
+        if self._stared:
+            self.button_star._setIconItem("star_fill")
+        else:
+            self.button_star._setIconItem("star")    
+    
+        print(data)
+        self.onStar.emit(data)        
+    
+        
+        
+    def onResponseLike(self,response:dict):
+        data:dict = response.get("data",{})
+        error = data.get("error",True)
+        
+        like:dict = data.get("like",{})
+        
+        self._liked = like.get("status",False)
+        
+        if self._liked:
+            self.button_like._setIconItem("like_fill")    
+        
+        else:
+            self.button_like._setIconItem("like")    
+            
+                
+        print(data)
+        self.onLike.emit(data)        
     
     def onclickLike(self):
-        self.button_like._setIconItem("like_fill")    
+        self.request_like = RequestManager()
         
+        self.request_like.query(url=self.request_like.url.archive_like,
+                          data={"id":self.id})
+        
+        self.request_like.request_finished.connect(self.onResponseLike)
         
     def onclickStar(self):
-        self.button_star._setIconItem("star_fill")
+        self.request_fav = RequestManager()
+        
+     
+        self.request_fav.query(url=self.request_fav.url.archive_favorite,
+                          data={"id":self.id})
+        
+        self.request_fav.request_finished.connect(self.onResponseStar)
+        
+    def getStateStar(self):
+        self.request_now = RequestManager()
+        
+        self.request_now.query(
+                        url=self.request_fav.url.archive_favorite_status,
+                        data={"id":self.id},
+                        )
+        
+        
+    def getStateLike(self):
+        self.request_now = RequestManager()
+        
+        self.request_now.query(
+                        url=self.request_fav.url.archive_like_status,
+                        data={"id":self.id},
+                        )
         
         
         
@@ -232,7 +309,6 @@ class ItemView(QWidget):
         
             
     def stopTasks(self):
-        print("🛑 Cancelando todas as tarefas...")
         for task in self.tasks:
             task.setCancel()
 

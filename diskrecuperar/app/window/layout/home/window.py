@@ -139,7 +139,6 @@ class Home(Window):
           
         self.title_layout = QVBoxLayout(self.main_frame)
         self.removeSpacing(self.title_layout)
-        self.setMarginsLayout()
         
         # self.title_layout.setProperty("class",["bg-white",])
         

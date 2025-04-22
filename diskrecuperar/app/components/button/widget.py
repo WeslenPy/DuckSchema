@@ -57,6 +57,7 @@ class PushButton(QPushButton,Icon):
         
         
     def _setIconItem(self,filename:str):
+        
         path = self.get_ico(filename=filename)
         self.addIcon(path)
      

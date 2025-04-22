@@ -25,6 +25,24 @@ class URLManager:
     @property
     def archive_filter(cls):
         return f"{cls.URL_BASE}/archive/filter"
+    
+    @property
+    def archive_like(cls):
+        return f"{cls.URL_BASE}/archive/like"    
+    
+    @property
+    def archive_favorite(cls):
+        return f"{cls.URL_BASE}/archive/favorite"
+
+    @property
+    def archive_favorite_status(cls):
+        return f"{cls.URL_BASE}/archive/favorite/status"
+
+    @property
+    def archive_like_status(cls):
+        return f"{cls.URL_BASE}/archive/like/status"
+
+
 
 class RequestManager(QObject):
     
@@ -51,6 +69,12 @@ class RequestManager(QObject):
         request.setHeader(QNetworkRequest.KnownHeaders.ContentTypeHeader, 
                              "application/x-www-form-urlencoded")
         
+        if TOKEN.token:
+            request.setRawHeader(b"Authorization", 
+                            f"Bearer {TOKEN.token}".encode())
+            
+        
+
         query = QUrlQuery()
         for key,value in data.items():
             query.addQueryItem(key,value)
@@ -77,9 +101,10 @@ class RequestManager(QObject):
 
         request.setRawHeader(b"User-Agent", b"DiskAPI/1.0")
         request.setRawHeader(b"Accept", b"application/json")
-        request.setRawHeader(b"Authorization", 
-                             f"Bearer {TOKEN.token}".encode())
-
+        if TOKEN.token:
+            request.setRawHeader(b"Authorization", 
+                            f"Bearer {TOKEN.token}".encode())
+            
 
         self.reply = self.manager.get(request)
 
@@ -97,6 +122,11 @@ class RequestManager(QObject):
         request.setRawHeader(b"Accept", b"application/json")
         request.setHeader(QNetworkRequest.KnownHeaders.ContentTypeHeader,
                              "application/json")
+        
+        if TOKEN.token:
+            request.setRawHeader(b"Authorization", 
+                            f"Bearer {TOKEN.token}".encode())
+            
         
         data = QByteArray(json.dumps(data).encode(encoding='utf-8'))
 
@@ -147,4 +177,5 @@ class RequestManager(QObject):
                 
         reply.deleteLater()
         
+        print(result)
         self.request_finished.emit(result)
