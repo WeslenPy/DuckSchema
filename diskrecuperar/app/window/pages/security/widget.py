@@ -22,13 +22,14 @@ class LoginPage(QWidget):
     
     change_window = Signal(bool)
     
-    def __init__(self, parent:QStackedWidget = None) -> None:
+    def __init__(self, parent:QStackedWidget = None,pages=None) -> None:
         super().__init__()
         self.stack:QStackedWidget = parent
         
         self.manager = ImageManager()
         
         self.request = RequestManager()
+        self.request.request_finished.connect(self.responseData)
         
         self.setup()
         
@@ -107,7 +108,6 @@ class LoginPage(QWidget):
         self.content_layout = QVBoxLayout(self.content_frame)
         
         self.popup = PopUp(self)
-        # self.popup.showMessageSuccess("teste")
         
         self.content_layout.addWidget(self.popup)
         
@@ -136,9 +136,9 @@ class LoginPage(QWidget):
         
         self.login_btn.setDisabled(False)
         
-        
         message:dict = data.get("message","Erro ao processar dados!")
         error = data.get("error",True)
+        
         if error:
             return self.popup.showMessageError(
                 message=message)      
@@ -148,6 +148,10 @@ class LoginPage(QWidget):
                    password=self.input_password.text())
 
         auth.save()
+        
+        
+        TOKEN.token = auth.token
+        
             
         self.popup.showMessageSuccess(
                 message=message) 
@@ -177,7 +181,6 @@ class LoginPage(QWidget):
                         data=dict(username=email,
                                     password=password))
 
-        self.request.request_finished.connect(self.responseData)
         
         
         

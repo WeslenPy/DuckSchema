@@ -112,11 +112,14 @@ class PopUp(QFrame):
         self.message_label.setText(message)
         self.setHidden(False)
         
-    def showMessageError(self,message):
+    def showMessageError(self,message,onclick=None):
         self.setHidden(False)
         self.message_label.setText(message)
         
         self.btn_close.clicked.connect(self.closeMessage)
+        
+        if onclick:
+            self.btn_close.clicked.connect(onclick)
                
         
         self.btn_close.setStyleSheet("""

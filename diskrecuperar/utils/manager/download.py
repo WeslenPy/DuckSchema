@@ -5,11 +5,16 @@ import tempfile,shutil
 
 import time
 from collections import deque
+from urllib.parse import ParseResult, urlparse
+
 
 MAX_CONCURRENT_DOWNLOADS = 1
 semaphore = QSemaphore(MAX_CONCURRENT_DOWNLOADS)
+tasking = False
+
 
 class DownloadSignals(QObject):
+    ondownload = Signal(int)
     progress = Signal(int)
     finished = Signal(bool)
     cancel = Signal(bool)
@@ -20,14 +25,20 @@ class DownloadSignals(QObject):
 
 
 class DownloadTask(QRunnable):
-    def __init__(self, url,folder:str):
+    def __init__(self, filename):
         super().__init__()
         
-        self.url:str = url
-        self.folder:str = folder
         self.signals = DownloadSignals()
+        self.filename = filename
         
         self.cancelled = False
+        
+        
+    def setURL(self,url:str):
+        self.url =url
+          
+    def setFolder(self,folder:str):
+        self.folder =folder
         
     def setCancel(self):
         self.cancelled = True
@@ -36,24 +47,43 @@ class DownloadTask(QRunnable):
         
         if self.cancelled:
             return
+    
+        available = semaphore.available()
+        self.signals.ondownload.emit(available)
+        
+        if not available:
+            return self.signals.cancel.emit(True)
+            
         
         self.signals.status.emit(False)
-        semaphore.acquire()  # Aguarda se limite for atingido
+        semaphore.acquire()  
         
         if self.cancelled:
             semaphore.release()
             return
         
-        
         try:
-            filename = self.url.split("/")[-1]
-            filepath = Path(self.folder).joinpath(filename).as_posix()
+            
+            url_parse: ParseResult = urlparse(url=self.url)
+            querystring: str= url_parse.query
+            uri = url_parse.scheme + "://" + url_parse.netloc + url_parse.path  
+            
+            
+            filepath = Path(self.folder).joinpath(self.filename).as_posix()
+            
             temp_dir = Path(tempfile.mkdtemp())
-            temp_path= Path(temp_dir).joinpath(filename).as_posix()
+            temp_path= Path(temp_dir).joinpath(self.filename).as_posix()
             
             self.signals.file.emit(filepath)
-        
-            with requests.get(self.url, stream=True, timeout=60) as r:
+            
+            headers = {"User-Agent": "insomnia/2023.5.8"}
+            
+            
+            with requests.request(method="GET", url=uri, 
+                                  data="",  headers=headers, 
+                                  params=querystring,stream=True,
+                                  timeout=60) as r:
+                
                 r.raise_for_status()
                 total = int(r.headers.get('content-length', 0))
                 downloaded = 0
@@ -93,10 +123,12 @@ class DownloadTask(QRunnable):
                 shutil.move(str(temp_path), filepath)
                 self.signals.finished.emit(True)
             
-        except RuntimeError:
-            pass
+        except RuntimeError as erro:
+            self.signals.cancel.emit(True)
+            self.signals.error.emit(True)
             
-        except Exception as e:
+        except Exception as erro:
+            self.signals.cancel.emit(True)
             self.signals.error.emit(True)
             
         finally:

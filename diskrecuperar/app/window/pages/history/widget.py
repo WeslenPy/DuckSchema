@@ -6,6 +6,6 @@ from PySide6.QtSvg import *
 from diskrecuperar.utils.manager.image import ImageManager
 
 class HistoryPage(QWidget):
-    def __init__(self, parent:QStackedWidget = None) -> None:
+    def __init__(self, parent:QStackedWidget = None,pages=None) -> None:
         super().__init__()
         self.stack:QStackedWidget = parent

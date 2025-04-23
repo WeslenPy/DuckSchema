@@ -11,7 +11,7 @@ from diskrecuperar.app.components.message.popup import PopUp
 from diskrecuperar.api.diskapi.api import RequestManager
 
 class RegisterPage(QWidget):
-    def __init__(self, parent:QStackedWidget = None) -> None:
+    def __init__(self, parent:QStackedWidget = None,pages=None) -> None:
         super().__init__()
         self.stack:QStackedWidget = parent
         

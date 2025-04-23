@@ -33,7 +33,7 @@ class Home(Window):
         # self.app = parent
         
         
-        self.setMinimumSize(720,720)
+        self.setMinimumSize(500,720)
         self.point_step = QtCore.QPoint()
         self.point_step.setX(-100)
         self.point_step.setY(-10)
@@ -193,11 +193,12 @@ class Home(Window):
         self.pages = QStackedWidget()
         self.manager_pages = PageManager(stack=self.pages)
         
-        self.pages.setCurrentWidget(self.manager_pages.home_page)
+        self.pages.setCurrentWidget(self.manager_pages.search_page)
         
         btn_args_constants = dict(signal=self.activeSignal,
                                   enabled=self.enabledSignal,
-                                  layout=self.pages_button_layout)
+                                  layout=self.pages_button_layout,
+                                  pages=self.pages)
         
         
         #BUTTONS SIDE BAR
@@ -216,13 +217,15 @@ class Home(Window):
         
         
         self.btn_search_page.onPage(self.pages,self.manager_pages.search_page)
-        self.btn_search_page.setPattern("Pesquisar","search")        
-
-        self.btn_history_page = ButtonPage(self,"history","Historico",
-                                          **btn_args_constants)
+        self.btn_search_page.setPattern("Pesquisar","search")                
         
-        self.btn_history_page.onPage(self.pages,self.manager_pages.history_page)
-        self.btn_history_page.setPattern("Historico","history")   
+        
+        
+                
+        self.btn_store_page = ButtonPage(self,"cart","Comprar",
+                                        **btn_args_constants)
+        self.btn_store_page.onPage(self.pages,self.manager_pages.store_page)
+        self.btn_store_page.setPattern("Comprar","cart")        
 
 
         self.spacer_side = QSpacerItem(20,20,
@@ -231,8 +234,8 @@ class Home(Window):
 
         self.pages_button_layout.addWidget(self.btn_menu_page)
         self.pages_button_layout.addWidget(self.btn_home_page)
+        self.pages_button_layout.addWidget(self.btn_store_page)
         self.pages_button_layout.addWidget(self.btn_search_page)
-        self.pages_button_layout.addWidget(self.btn_history_page)
         self.pages_button_layout.addItem(self.spacer_side)
         
         

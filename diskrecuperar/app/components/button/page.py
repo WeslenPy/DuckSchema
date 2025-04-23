@@ -12,7 +12,9 @@ class ButtonPage(PushButton):
     def __init__(self,parent:QMainWindow,name:str,title:str,
                  signal:Signal,
                  enabled:Signal,
-                 layout:QBoxLayout,) -> None:
+                 layout:QBoxLayout,
+                 pages:QStackedWidget,
+                 ) -> None:
         
         super().__init__(parent=parent,name=name,title=title)
         
@@ -31,7 +33,7 @@ class ButtonPage(PushButton):
         self.min_height = 30
         self.size_btn = (self.min_width,self.min_height)
         
-        
+        self.pages =pages
         
     def changePage(self,pages:QStackedWidget,page:QStackedWidget):
         pages.setCurrentWidget(page)
@@ -41,11 +43,14 @@ class ButtonPage(PushButton):
         self.clicked.connect(lambda: self.changePage(pages=pages,page=page))
         self.released.connect(self._createAnimation)
         
+        self.pages.currentChanged.connect(lambda:self.signalChange(toPage=page))
         
         
     def addSignal(self):
         self.enabled.connect(lambda mode: self.enableText(mode=mode))
         self.signal.connect(lambda name: self.signalDeactivate(name=name))
+        
+      
       
     def setPattern(self,tooltip:str,filename:str):
         
@@ -59,6 +64,14 @@ class ButtonPage(PushButton):
     def enableText(self,mode:bool):
         self.setText("")
         if mode:  self.setText(self.title)
+        
+    def signalChange(self,toPage):
+        
+        if self.pages.currentWidget()==toPage:
+            self.setChecked(True)
+        else:
+            if self.name not in self.EXCLUDE:
+                self.setChecked(False)
             
     @Slot()
     def signalDeactivate(self,name:str):

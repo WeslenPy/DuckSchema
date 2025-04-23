@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget
 from diskrecuperar.app.components.button.widget import PushAction
 
 from diskrecuperar.utils.manager.path import BasePath
-from diskrecuperar.utils.manager.download import DownloadTask
+from diskrecuperar.utils.manager.download import DownloadTask,semaphore,tasking
 
 from PySide6.QtCore import QThreadPool
 
@@ -16,15 +16,20 @@ from diskrecuperar.api.diskapi.api import RequestManager
 
 class ListWidget(QFrame):
     
+    more = Signal(bool)
+    
+    
     def __init__(self, parent=None,relative:QWidget=None):
         
         super().__init__(parent=parent)
-        
+
         self.relative:QWidget = relative
 
         self.setHidden(True)
         self.setup()
         
+    def setPage(self,page:int):
+        self.page=page
         
     def setup(self):
             
@@ -60,11 +65,20 @@ class ListWidget(QFrame):
         
         self.list_search.setProperty("class",["list-view"])
         
+        self.scroll_search = self.list_search.verticalScrollBar()
+        
+        self.scroll_search.valueChanged.connect(self.moreItems)
+        
         self.list_layout.addWidget(self.top_frame_list)
         self.list_layout.addWidget(self.list_search)
         
         self.setLayout(self.list_layout)
         
+        
+    def moreItems(self,currentIndex):
+        
+        if currentIndex>=self.scroll_search.maximum():
+            self.more.emit(True)
         
         
     def clearItems(self):
@@ -84,9 +98,9 @@ class ListWidget(QFrame):
 class ItemView(QWidget):
     
     
-    
     onLike = Signal(dict)
     onStar = Signal(dict)
+    onMessage = Signal(dict)
     onCancel = Signal(dict)
     
     
@@ -94,22 +108,47 @@ class ItemView(QWidget):
     _stared = False
     
     
-    def __init__(self, parent=None,url:str=None,
-                 _id:int=None,directory:str=None,**kwargs):
+    def __init__(self, parent=None, _id:int=None,filename=None,
+                 directory:str=None,**kwargs):
         
         
         super().__init__(parent=parent,**kwargs)
         
-        self.url = url or  "https://nbg1-speed.hetzner.com/100MB.bin"
         self.directory =directory
         
+        self.filename=filename
+        
         self.id = _id
-        self.pool = QThreadPool()
         
- 
-        
-        self.tasks:list[DownloadTask] = []
         self._setup()
+        
+        self.pool = QThreadPool()
+     
+        self.request_like= RequestManager()
+        self.request_star= RequestManager()
+        self.request_download= RequestManager()
+        
+                 
+        self.task = DownloadTask(
+                            filename=self.filename
+                            )
+    
+    
+        self.task.signals.ondownload.connect(self.checkOnDownload)
+        
+        self.task.signals.progress.connect(self.progress_bar_download.setValue)
+        self.task.signals.finished.connect(self.progressFinish)
+        
+        self.request_like.request_finished.connect(
+            self.onResponseLike)
+        
+        
+        self.request_download.request_finished.connect(
+            self.onResponseURL)
+        
+        self.request_star.request_finished.connect(
+            self.onResponseStar)
+        
         
     def resetLayout(self,layout:QLayout):
         
@@ -135,15 +174,16 @@ class ItemView(QWidget):
         self.progress_bar_download.hide()
         
         self.label_title = QLabel()
+        self.label_title.setStyleSheet("")
         
-        self.label_title.setText("teste")
         self.label_title.setProperty("class",["text-white","fs-2","fs-w-400"])
         
+        
         self.button_download = PushAction(icon="download")
-        self.button_download.clicked.connect(self.onclickDownload)         
+        self.button_download.clicked.connect(self.getURLDownload)         
         
         self.button_cancel = PushAction(icon="cancel")
-        # self.button_cancel.clicked.connect(self.onclickCancel) 
+        self.button_cancel.clicked.connect(self.onclickCancel)
         self.button_cancel.setProperty("class",["btn-download-cancel"])
         self.button_cancel.hide()
         
@@ -174,8 +214,28 @@ class ItemView(QWidget):
         
         self.setLayout(container_layout)
         
+        
+    def setStateStar(self,state:bool):
+        
+        
+        if state:
+            self.button_star._setIconItem("star_fill")
+        else:
+            self.button_star._setIconItem("star")    
+            
+    def setStateLike(self,state:bool):
+        
+        if state:
+            self.button_like._setIconItem("like_fill")    
+        
+        else:
+            self.button_like._setIconItem("like")    
+            
+
+        
     def setText(self,text:str):
         self.label_title.setText(text)
+        # self.label_title.setToolTip(text)
         
 
     def setURLDownload(self,url:str):
@@ -185,14 +245,52 @@ class ItemView(QWidget):
         if self.directory:
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.directory)))
         
-    def onclickCancel(self,task:DownloadTask):
-        task.setCancel()
+    def onclickCancel(self):
+        global tasking
+        
+        
+        self.task.setCancel()
         
         self.button_cancel.hide()
         self.button_download.show()
         self.progress_bar_download.hide()
         
-    def onclickDownload(self):
+        tasking=False
+        
+    def onResponseURL(self,response:dict):
+        data:dict = response.get("data",{})
+        error = data.get("error",True)
+        
+        
+        if not error:
+            url = data.get("url","")
+            self.onclickDownload(url=url)
+        
+        self.onMessage.emit(data)        
+        
+        
+        
+    def getURLDownload(self):
+        global tasking
+        
+        if not semaphore.available() or tasking:
+            return self.checkOnDownload(
+                available=semaphore.available() or not tasking)
+        
+        tasking = True
+
+        self.onStar.emit(
+                {
+                    "message":"Verificando se o arquivo esta disponivel, aguarde....",
+                    "error":False
+                })
+            
+        self.request_download.query(
+                        url=self.request_download.url.archive_download,
+                        data={"id":self.id},
+                        )
+        
+    def onclickDownload(self,url:str):
         
         self.directory = str(QFileDialog.getExistingDirectory(self,
                                                     "Selecione o diretorio.",
@@ -203,24 +301,23 @@ class ItemView(QWidget):
             self.progress_bar_download.show()
             self.button_download.hide()
             self.button_cancel.show()
-            
-            task = DownloadTask(self.url,self.directory)
-            
             self.progress_bar_download.setValue(0)
-            
-            task.signals.progress.connect(self.progress_bar_download.setValue)
-            task.signals.finished.connect(self.progressFinish)
-            task.signals.velocity.connect(lambda msg: print(msg))
-            task.signals.error.connect(lambda msg: print(msg))
+   
+            self.task.setFolder(folder=self.directory)
+            self.task.setURL(url=url)
+     
+            # task.signals.velocity.connect(lambda msg: print(msg))
+            # task.signals.error.connect(lambda msg: print(msg))
             
             # task.signals.cancel.connect()
-            self.button_cancel.clicked.connect(
-                lambda:self.onclickCancel(task))
-
-
-            self.tasks.append(task)
-            self.pool.start(task)
+       
+            self.pool.start(self.task)
             
+    def checkOnDownload(self,available:int):
+        if not available:
+            self.onStar.emit(
+                {"message":"Aguarde o download anterior finalizar!",
+                "error":True})
             
             
     def onResponseStar(self,response:dict):
@@ -237,7 +334,6 @@ class ItemView(QWidget):
         else:
             self.button_star._setIconItem("star")    
     
-        print(data)
         self.onStar.emit(data)        
     
         
@@ -257,46 +353,22 @@ class ItemView(QWidget):
             self.button_like._setIconItem("like")    
             
                 
-        print(data)
         self.onLike.emit(data)        
     
     def onclickLike(self):
-        self.request_like = RequestManager()
         
         self.request_like.query(url=self.request_like.url.archive_like,
                           data={"id":self.id})
         
-        self.request_like.request_finished.connect(self.onResponseLike)
         
     def onclickStar(self):
-        self.request_fav = RequestManager()
-        
-     
-        self.request_fav.query(url=self.request_fav.url.archive_favorite,
+        self.request_star.query(url=self.request_star.url.archive_favorite,
                           data={"id":self.id})
         
-        self.request_fav.request_finished.connect(self.onResponseStar)
-        
-    def getStateStar(self):
-        self.request_now = RequestManager()
-        
-        self.request_now.query(
-                        url=self.request_fav.url.archive_favorite_status,
-                        data={"id":self.id},
-                        )
-        
-        
-    def getStateLike(self):
-        self.request_now = RequestManager()
-        
-        self.request_now.query(
-                        url=self.request_fav.url.archive_like_status,
-                        data={"id":self.id},
-                        )
-        
-        
+
         
     def progressFinish(self):
+        global tasking
 
 
         self.progress_bar_download.hide()
@@ -304,13 +376,17 @@ class ItemView(QWidget):
         self.button_download.show()
         self.button_open_folder.show()
         self.button_cancel.hide()
-
-
+        tasking=False
+        
+        
+        self.onStar.emit(
+                {"message":"Download finalizado com sucesso!",
+                "error":False})
+            
         
             
     def stopTasks(self):
-        for task in self.tasks:
-            task.setCancel()
+        self.task.setCancel()
 
-        self.pool.waitForDone(3000)  
+        # self.pool.waitForDone(3000)  
         

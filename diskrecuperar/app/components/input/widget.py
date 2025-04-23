@@ -327,7 +327,12 @@ class InputSearch(InputForm):
         self.setEcho(self.ECHO)
         self.setTitle("")
         self.setIcon(icon=self.image.get_svg("search"))
+             
+        # self.icon_btn.clicked.connect(
+        #     lambda:self.editingFinished.emit())   
         
+        self.icon_btn.clicked.connect(
+            lambda:self.editingFinished.emit())
         
     def focusInputOut(self, e: QFocusEvent):
         # self.checkField()

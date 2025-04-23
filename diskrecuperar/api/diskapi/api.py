@@ -23,9 +23,23 @@ class URLManager:
     
     
     @property
+    def product_list(cls):
+        return f"{cls.URL_BASE}/product/list"
+    
+    @property
+    def purchased_new(cls):
+        return f"{cls.URL_BASE}/purchased/new"
+    
+    
+    @property
+    def archive_download(cls):
+        return f"{cls.URL_BASE}/archive/download"
+    
+    @property
     def archive_filter(cls):
         return f"{cls.URL_BASE}/archive/filter"
-    
+
+
     @property
     def archive_like(cls):
         return f"{cls.URL_BASE}/archive/like"    
@@ -91,10 +105,29 @@ class RequestManager(QObject):
         self._start_timeout(self.reply,10000)
         
         
-    def query(self,url,data:dict):
+    def query(self,url,data:dict={}):
         
         query_params =  urlencode(query=data)
         request = QNetworkRequest(QUrl(f"{url}?{query_params}"))
+
+        # ssl_config: QSslConfiguration = QSslConfiguration.defaultConfiguration()
+        # request.setSslConfiguration(ssl_config)
+
+        request.setRawHeader(b"User-Agent", b"DiskAPI/1.0")
+        request.setRawHeader(b"Accept", b"application/json")
+        if TOKEN.token:
+            request.setRawHeader(b"Authorization", 
+                            f"Bearer {TOKEN.token}".encode())
+            
+
+        self.reply = self.manager.get(request)
+
+        self._start_timeout(self.reply,10000)
+        
+        
+    def get(self,url):
+        
+        request = QNetworkRequest(QUrl(url))
 
         # ssl_config: QSslConfiguration = QSslConfiguration.defaultConfiguration()
         # request.setSslConfiguration(ssl_config)
@@ -177,5 +210,5 @@ class RequestManager(QObject):
                 
         reply.deleteLater()
         
-        print(result)
+        # print(result)
         self.request_finished.emit(result)

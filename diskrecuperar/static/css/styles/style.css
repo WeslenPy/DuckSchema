@@ -598,7 +598,10 @@
 }
 
 
-
+.border-around{
+  border:2px solid transparent;
+  border-radius: 15px;
+}
 
 .border-0{
   border: none;
@@ -617,7 +620,9 @@
 .fs-2{
   font-size: 15px;
 }
-
+.fs-3{
+  font-size: 20px;
+}
 .fs-4{
   font-size: 80px;
 }
@@ -691,3 +696,45 @@
 }
 
 
+.fs-card{
+  font-family: "Roboto";
+  font-weight: 500;
+  font-style: bold;
+  word-spacing: 1px;
+  font-size: 16px;
+  color:white;
+
+}
+
+.fs-money{
+  font-family: "Roboto";
+  font-weight: 800;
+  font-style: bold;
+  word-spacing: 5px;
+  font-size: 16px;
+  color:white;
+
+}
+
+.fs-title{
+  font-family: "Roboto";
+  font-weight: 600;
+  font-style: bold;
+  word-spacing: 1px;
+  font-size: 20px;
+  color:#312f2f;
+  margin-bottom: 10px;
+
+}
+
+
+.card{
+  background-color: #45c484;
+  border :none; 
+  border:2px solid #45c484;
+  border-radius:10px;
+  }
+  
+.card:hover{
+      background-color: rgb(45, 161, 103);
+  }
