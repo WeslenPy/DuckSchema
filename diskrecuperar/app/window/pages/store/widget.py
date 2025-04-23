@@ -98,14 +98,13 @@ class StorePage(QWidget):
         
         for product in products:
             product_id =product.get("id","")
-            card = Card()
-            self.box_layout.addWidget(card)
-            card.setTitle(product.get("name"))
-            card.setMoney(text=product.get("price"))
             
-            card.btn_redirect.clicked.connect(
-                lambda: self.newPayment(product_id=product_id))
+            self.card = Card(_id=product_id)
+            self.box_layout.addWidget(self.card)
+            self.card.setTitle(product.get("name"))
+            self.card.setMoney(text=product.get("price"))
             
+            self.card.clicked.connect( self.newPayment)
             
             
     def responsePayment(self,response:dict):
@@ -127,6 +126,7 @@ class StorePage(QWidget):
             
             
     def newPayment(self,product_id:int):
+        print(product_id)
         
         self.popup.showMessageSuccess(message="Gerando link de pagamento....")
         

@@ -13,13 +13,13 @@ from diskrecuperar.utils.manager.image import ImageManager
 
 class Card(QFrame):
     
-    def __init__(self,parent=None):
+    clicked = Signal(str)
+    
+    def __init__(self,parent=None,_id=None):
         super().__init__(parent=parent)
         
-        
+        self.id=_id
         self.manager = ImageManager()
-        
-        
         
         self.setup()
         
@@ -38,18 +38,7 @@ class Card(QFrame):
         
         self.setProperty("class",["card"])
         
-        # self.setStyleSheet("""
-        #                     QFrame{
-        #                     background-color: #45c484;
-        #                     border :none; 
-        #                     border:2px solid #45c484;
-        #                     border-radius:10px;
-        #                     }
-                            
-        #                     QFrame:hover{
-        #                         background-color: rgba(69, 196, 133, 0.767);
-        #                     }
-        #                     """)
+  
         
         self.frame_layout = QHBoxLayout(self.frame_content)
         self.frame_layout.setContentsMargins(15,10,15,5)
@@ -81,6 +70,7 @@ class Card(QFrame):
         
         
         self.btn_redirect = PushAction(icon="redirect")
+        self.btn_redirect.clicked.connect(self.clickedCard)
         
         self.mouseDoubleClickEvent = self.mouseDoubleClick
         
@@ -94,8 +84,12 @@ class Card(QFrame):
         
         self.setLayout(self.frame_layout)
         
+    def clickedCard(self):
+        self.clicked.emit(str(self.id))
+        
+        
     def mouseDoubleClick(self,event:QMouseEvent):
-        self.btn_redirect.clicked.emit()
+        self.clicked.emit(str(self.id))
         
     
     def setTitle(self,text:str):
