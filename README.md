@@ -1,2 +1,2 @@
 # DuckSchema
-Projeto para fornecer arquivos sobre demanda 
+Projeto para fornecer esquemas, boardviews, bios entre outros. 
