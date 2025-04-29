@@ -1,2 +1,2 @@
-# DiskRecuperar
-Projeto para fornecer arquivos sobre demanda 
+# DuckSchema
+Projeto para fornecer esquemas, boardviews, bios entre outros. 
