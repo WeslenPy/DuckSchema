@@ -42,18 +42,22 @@ class RegisterPage(QWidget):
         self.logo_layout.setSpacing(0)
         
         
-        self.label_logo = QLabel()
+        self.file_path= self.manager.get_svg_logo("logo")
+        self.logo_size = QSvgRenderer(self.file_path)
+        self.logo_svg = QSvgWidget(self.file_path)
+        self.logo_svg.setFixedSize(150,150)
+        
+        
         self.label_subtitle = QLabel()
         self.label_subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        self.label_logo.setPixmap(self.manager.get_png(filename="icon"))
+
+
         self.label_subtitle.setText("Cadastre-se aqui:")
         self.label_subtitle.setProperty("class",["fs-2","font-robot",
                                                  "fs-w-400","mt-2"])
         
         
-        self.logo_layout.addWidget(self.label_logo)
+        self.logo_layout.addWidget(self.logo_svg,alignment=Qt.AlignmentFlag.AlignCenter)
         self.logo_layout.addWidget(self.label_subtitle)
         
         

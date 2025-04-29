@@ -34,6 +34,8 @@ class Login(Window):
         super().__init__()
         
         self.setMinimumSize(500,720)
+        self.setMaximumWidth(500)
+        
         self.point_step = QtCore.QPoint()
         self.point_step.setX(-100)
         self.point_step.setY(-10)

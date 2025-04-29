@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from PySide6 import QtWidgets,QtCore,QtGui
-from diskrecuperar.app.window.layout.home.window import Home
-from diskrecuperar.app.window.layout.security.window import Login
-from diskrecuperar.database.config.base import Model
-from diskrecuperar.database.config.conn import engine
-from diskrecuperar.database.model import *
-from diskrecuperar.utils.manager.path import BasePath
-from diskrecuperar.utils.manager.font import FontManager
-from diskrecuperar.utils.manager.css import CssManager
+from duckschema.app.window.layout.home.window import Home
+from duckschema.app.window.layout.security.window import Login
+from duckschema.database.config.base import Model
+from duckschema.database.config.conn import engine
+from duckschema.database.model import *
+from duckschema.utils.manager.path import BasePath
+from duckschema.utils.manager.font import FontManager
+from duckschema.utils.manager.css import CssManager
 import sys,os,tempfile
 
 
