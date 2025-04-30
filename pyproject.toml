@@ -18,6 +18,7 @@ dependencies = [
     "pyside6[webengine] (>=6.9.0,<7.0.0)",
     "cryptography (==43.0.0)",
     "pyqt6-webengine (>=6.9.0,<7.0.0)",
+    "nuitka (==2.6.9)",
 
 ]
 
@@ -74,6 +75,7 @@ pre_test = 'task lint'
 test = 'pytest -s -x --cov=app -vv'
 post_test = 'coverage html'
 compile = "compile.bat"
+onefile = "onefile.bat"
 
 
 [build-system]

@@ -10,7 +10,7 @@ from PySide6.QtNetwork import (QNetworkAccessManager,
 from urllib.parse import urlencode
 class URLManager:
     
-    URL_BASE = "http://127.0.0.1:8000/api/v1"
+    URL_BASE = "http://159.203.132.92:80/api/v1"
     
     
     @property
